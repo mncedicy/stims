@@ -1,0 +1,57 @@
+<script src="/Scripts/Printing/legal.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-2"><b>Legal Letter</b></h5>
+                <form action="" autocomplete="off">
+                    <div class="input-group input-group-sm " style="width:500px">
+                        <select class="form-select validSearch" id="cboLetterType">
+                            <option value="">Letter Type</option>
+                            <option value="Warrant Letter">Warrant Letter</option>
+                            <option value="Courtesy letter">Courtesy letter</option>
+                            <option value="Enforcement Order">Enforcement Order</option>
+                        </select>
+                        <input type="text" autocomplete="off"  class="form-control myDaterangepicker validSearch" placeholder="Date Range"  style="width:35%"/>
+                        <a class="btn btn-outline-primary" id="btnSearch"><i class="ti ti-search"></i></a>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+            <div class="dt-responsive">
+                <table id="tblNotice" class="table table-xs nowrap table-hover">
+                    <thead>
+                    <tr class="border-bottom">
+                        <th><div class="form-check"><input id="checkAllNotice" class="form-check-input" type="checkbox"></div></th>
+                        <th>#</th>
+                        <th>References</th>
+                        <th>Registration</th>
+                        <th>Driver Name</th>
+                        <th>Letter</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-center">
+                            <a href="#!" id="btnPrintSelected" class="btn btn-outline-primary btn-small disabled">Print Selected</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="listLetters"></tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+

@@ -1,0 +1,308 @@
+
+<script src="/Scripts/Configuration/advanced.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-2"><b>Advanced Configuration</b></h5>
+                <a style="display:none" id="btnSaveChanges" class="btn btn-outline-primary btn-sm ">Save Changes</a>
+
+            </div>
+
+
+        </div>
+
+        <div class="card-body">
+            <div class="d-flex w-100 align-items-center mb-4">
+                <ul class="nav nav-tabs profile-tabs flex-grow-1" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" id="step1" data-bs-toggle="tab" href="#profile-11" role="tab" aria-selected="false" tabindex="-1">Client Details</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" id="step2" data-bs-toggle="tab" href="#profile-21" role="tab" aria-selected="true">Addresses</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" id="step3" data-bs-toggle="tab" href="#profile-31" role="tab" aria-selected="false" tabindex="-1">Bank & Fees</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" id="step4" data-bs-toggle="tab" href="#profile-41" role="tab" aria-selected="false" tabindex="-1">Notice Steps</a></li>
+                </ul>
+            </div>
+
+            <div class="tab-content m-l-10 m-r-10">
+                <div class="tab-pane active show" id="profile-11" role="tabpanel" aria-labelledby="profile-tab-11">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtClientName" placeholder="" type="text" class="form-control clientField requiredClient1">
+                                <label for="txtClientName">Client Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtEmailAddress" placeholder="" type="email" class="form-control clientField txtEmail">
+                                <label for="txtEmailAddress">Email Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input id="txtTelephone" placeholder="" type="number" class="form-control clientField txtPhone">
+                                    <label for="txtTelephone">Telephone Number</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtTelephoneAlt" placeholder="" type="number" class="form-control clientField txtPhone">
+                                    <label for="txtTelephoneAlt">Alternative Number</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtFaxNumber" type="number" placeholder="" class="form-control clientField txtPhone">
+                                <label for="txtFaxNumber">Fax Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtWebsite" type="text" placeholder="" class="form-control requiredClient1 clientField">
+                                <label for="txtWebsite">Website</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtLogoLink" type="text" placeholder="" class="form-control requiredClient1 clientField">
+                                <label for="txtLogoLink">Logo Link</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="form-floating">
+                                <input id="txtAuthorityCode" type="text" placeholder="" class="form-control requiredClient1 clientField">
+                                <label for="txtAuthorityCode">Authority Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input id="txtOpeningHour" type="text" placeholder="" class="form-control requiredClient1 clientField myTimerangepicker">
+                                    <label for="txtOpeningHour">Opening Hour</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtClosingHour" type="text" placeholder="" class="form-control requiredClient1 clientField myTimerangepicker">
+                                    <label for="txtClosingHour">Closing Hour</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="profile-21" role="tabpanel" aria-labelledby="profile-tab-21">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPhysicalAddress" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txtPhysicalAddress">Physical Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPostalAddress" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txtPostalAddress">Postal Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPhysicalSuburb" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txtPhysicalSuburb">Suburb</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPostalSuburb" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txtPostalSuburb">Suburb</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPhysicalCity" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txPhysicaltCity">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPostalCity" placeholder="" type="text" class="form-control text-uppercase requiredClient clientField ">
+                                <label for="txPostaltCity">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPhysicalCode" placeholder="" maxlength="4" type="number" class="form-control requiredClient clientField ">
+                                <label for="txtPhysicalCode">Code</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtPostalCode" placeholder="" maxlength="4" type="number" class="form-control requiredClient clientField">
+                                <label for="txtPostalCode">Code</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="profile-31" role="tabpanel" aria-labelledby="profile-tab-31">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtAccountName" placeholder="" type="text" class="form-control text-uppercase requiredClient2 clientField ">
+                                <label for="txtAccountName">Account Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <select class="form-control requiredClient2 requiredMin clientField" placeholder="" id="cboDiscount">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <label for="cboDiscount">Payment discount</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtDiscountPercentage" type="number" placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtDiscountPercentage">Percentage (%)</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtDiscountTimeframe" type="number" placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtDiscountTimeframe">Timeframe (Days)</label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <select class="form-control requiredClient2 clientField" placeholder="" id="txtBankName">
+                                    <option value="">Select</option>
+                                    <option value="Absa Bank">Absa Bank</option>
+                                    <option value="African Bank">African Bank</option>
+                                    <option value="Bidvest Bank">Bidvest Bank</option>
+                                    <option value="Capitec Bank">Capitec Bank</option>
+                                    <option value="Discovery Bank">Discovery Bank</option>
+                                    <option value="First National Bank">First National Bank</option>
+                                    <option value="Investec Bank">Investec Bank</option>
+                                    <option value="Mercantile Bank">Mercantile Bank</option>
+                                    <option value="Nedbank">Nedbank</option>
+                                    <option value="Old Mutual Bank">Old Mutual Bank</option>
+                                    <option value="Sasfin Bank">Sasfin Bank</option>
+                                    <option value="Standard Bank">Standard Bank</option>
+                                    <option value="Tyme Bank">Tyme Bank</option>
+                                    <option value="Ubank">Ubank</option>
+                                </select>
+                                <label for="txtBankName">Bank Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <select class="form-control requiredClient2 requiredMin clientField" placeholder="" id="txtCourtesyLetter">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <label for="txtCourtesyLetter">Courtesy Letter</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtCourtesyLetterFee" type="number" placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtCourtesyLetterFee">Fee (R)</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtCourtesyLetterTimeframe" type="number" placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtCourtesyLetterTimeframe">Timeframe (Days)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtAccountNumber" placeholder="" type="number" class="form-control text-uppercase requiredClient2 clientField ">
+                                <label for="txtAccountNumber">Account Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <select class="form-control requiredClient2 requiredMin clientField" placeholder=""id="txtEnforcementOrder">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <label for="txtEnforcementOrder">Enforcement Order</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtEnforcementOrderFee" type="number"  placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtEnforcementOrderFee">Fee (R)</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtEnforcementOrderTimeframe" type="number"  placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtEnforcementOrderTimeframe">Timeframe (Days)</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input id="txtBranchCode" placeholder="" maxlength="4" type="number" class="form-control requiredClient2 clientField ">
+                                <label for="txtBranchCode">Branch Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3 ">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <select class="form-control requiredClient2 requiredMin clientField" disabled="disabled"  placeholder="" id="txtWarrant">
+                                        <option value="Yes" selected>Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <label for="txtWarrant">Warrant of Arrest</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtWarrantFee" type="number"  placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtWarrantFee">Fee (R)</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input id="txtWarrantTimeframe" type="number"  placeholder="" class="form-control requiredMinNumber clientField">
+                                    <label for="txtWarrantTimeframe">Timeframe (Days)</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="profile-41" role="tabpanel" aria-labelledby="profile-tab-41">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <h5>Step 1 – Infringement Notice</h5>
+                            Hand-written infringement notices are handed out by traffic offices and will eventually be replaced by electronic devices.
+                            At this point, the fine amount has a 50% discount attached if paid in 32 days.
+
+                            <h5 class="mt-4">Step 2 - Courtesy letter</h5>
+                            A courtesy letter is mailed if the fine is not paid in the first 32 days that the infringement notice is issued. At this point, the full amount must now be paid plus administration fees. Failure to comply with the requirements of the Courtesy Letter will result in the issuing of an Enforcement Order.
+
+                            <h5 class="mt-4">Step 3 – Enforcement Order</h5>
+                            By failing to comply with the Courtesy Letter or appearing in court after electing to appear in court, an offender will be issued an Enforcement Order by mail.
+
+
+                            Failure to comply with the requirements of the Enforcement Order within 32 days will result in a Warrant being issued to recover the applicable penalty and fees.
+
+
+                            <h5 class="mt-4">Step 4 – Warrant of Execution</h5>
+                            If the Enforcement Order is not complied with within 32 days a Warrant will be issued and handed to a Sheriff for execution.
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+

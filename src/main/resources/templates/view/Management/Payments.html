@@ -1,0 +1,223 @@
+<script src="/Scripts/Management/payments.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-2"><b>Payments - </b> <i>Invoices</i></h5>
+                <form action="" autocomplete="off">
+                    <div class="input-group input-group-sm " style="min-width:360px">
+                        <input type="text" autocomplete="off" class="form-control myDaterangepicker validSearch"
+                            placeholder="Date Range" style="width:35%" data-bs-toggle="tooltip"
+                            data-bs-title="Offence Date Range" />
+                        <a class="btn btn-outline-primary" id="btnSearch"><i class="ti ti-search"></i></a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-6" data-bs-toggle="tooltip" data-bs-title="Total invoices created">
+                                    <h5 class="mb-1 txtInvoices">0</h5>
+                                    <p class="mb-0">
+                                        Invoices
+                                    </p>
+                                </div>
+                                <div class="col-md-6" data-bs-toggle="tooltip" data-bs-title="Total infringements paid">
+                                    <h5 class="mb-1 txtInfringements">0</h5>
+                                    <p class="mb-0">
+                                        Tickets
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Total amount paid">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="mb-1 txtTotalFine">R0.00</h5>
+                                    <p class="mb-0">
+                                        Total
+                                        <span class="float-end"><i class="ti ti-chart-bar text-primary f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Cash payments">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="mb-1 txtCash">0</h5>
+                                    <p class="mb-0">
+                                        Cash
+                                        <span class="float-end"><i
+                                                class="ti ti-report-money text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Card payments">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="mb-1 txtCard">0</h5>
+                                    <p class="mb-0">
+                                        Card
+                                        <span class="float-end"><i
+                                                class="ti ti-credit-card  text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Transferred payments">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h5 class="mb-1 txtTransfer">0</h5>
+                                    <p class="mb-0">
+                                        Transfer
+                                        <span class="float-end"><i
+                                                class="ti ti-trending-up text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 col-xl-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="chartOfficer" style="min-height: 300px;"></div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="chartOfficerPie" style="width: 100%; min-height: 300px;">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+            <div class="dt-responsive">
+                <table id="tblNotice" class="table table-xs nowrap table-hover">
+                    <thead>
+                        <tr class="border-bottom">
+                            <th>#</th>
+                            <th>Invoice Number</th>
+                            <th>Received By</th>
+                            <th>Paid By</th>
+                            <th>Payment Type</th>
+                            <th>Tickets</th>
+                            <th>Amount</th>
+                            <th>
+                                <a href="#!" id="btnExport" class="btn btn-outline-primary btn-small disabled"
+                                    data-bs-toggle="tooltip" data-bs-title="Export to Excel or PDF">Export</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listReport"></tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="modal fade modal-animate" id="printReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalTitle" class="modal-title text-capitalize">Payment Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body text-muted p-4 text-center pb-2">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
+
+                            <select class="form-control  requiredReport" placeholder="" id="cboDocumentType">
+                                <option value="">Select</option>
+                                <option value="PDF">PDF</option>
+                                <option value="Excel">Excel</option>
+                            </select>
+                            <label for="cboDocumentType">Document Type</label>
+                        </div>
+
+
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-12 divGrouping">
+                    <div class="mb-3">
+                        <div class="form-floating">
+
+                            <select class="form-control" placeholder="" id="cboGrouping">
+                                <option value="All" selected>No Grouping</option>
+                                <option value="Payment Type">Payment Type</option>
+                                <option value="Collected By">Collected By</option>
+                                <option value="Payment Date">Payment Date</option>
+                                <option value="Payment Month">Payment Month</option>
+                            </select>
+                            <label for="cboGrouping">Grouping</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSubmitReport" class="btn btn-primary shadow-2">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<style>
+  .bold{font-weight: bold;}
+  .bolder{font-weight: 600;}
+    .card{border-radius: 0px;}
+  .muted{color:#d4d4d4 !important};
+</style>
+<body >
+
+<div class="col-md-12">
+  <h5 class="row text-center bold">Court Register</h5>
+  <div class="row">
+    <div class="col-md-4"  style="width:130%">
+      <p class="bolder mb-0" data-th-text="${court_roll.court_roll_court_name}"></p>
+      <p style="font-size: 12px;" data-th-text="${court_roll.court_roll_court_address}"></p>
+    </div>
+    <div class="col-md-4">
+      <p class="bolder mb-0" data-th-text="${court_roll.court_roll_infringement_type}"></p>
+      <p style="font-size: 11px;">Notice Type</p>
+    </div>
+    <div class="col-md-4">
+      <p class="bolder mb-0" data-th-text="${#temporals.format(court_roll.court_roll_court_date, 'MMM dd, yyyy') }"></p>
+      <p  style="font-size: 11px;">Court Date</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4"  style="width:100%">
+      <p class="bolder mb-0 text-center">______________________________</p>
+      <p class="text-center" style="font-size: 11px;">Public Prosecutor</p>
+    </div>
+    <div class="col-md-4">
+      <p class="bolder mb-0 text-center">______________________________</p>
+      <p  class="text-center" style="font-size: 11px;">Preciding Officer</p>
+    </div>
+    <div class="col-md-4">
+      <p class="bolder mb-0 text-center">______________________________</p>
+      <p class="text-center" style="font-size: 11px;">Court Clerk</p>
+    </div>
+  </div>
+
+</div>
+
+<div data-th-each="court_roll_item, iteration : ${court_roll_items}" class="item last">
+
+  <div class="card" style="font-size: 11px;">
+    <div class="card-body f-10">
+      <ul class="list-group list-group-flush mb-0 pb-0 pb-0 pt-0">
+        <li class="list-group-item px-0 pt-0 pb-0  mb-0 pb-0 pb-0 pt-0">
+          <div class="row mb-0 pb-0 pb-0 pt-0">
+            <div class="col-md-2  pr-0"  style="width:120%" >
+              <b class="mb-1 bold">Case Number</b>
+              <p class="mb-2" data-th-text="${court_roll_item.court_roll_item_id}"></p>
+              <b class="mb-1 bold">Notice Number</b>
+              <p class="mb-2" data-th-text="${court_roll_item.court_roll_item_notice_reference}"></p>
+              <b class="mb-1 bold">Full Name</b>
+              <p class="mb-0" data-th-text="${court_roll_item.court_roll_item_name}"></p>
+            </div>
+            <div class="col-md-2">
+              <b class="mb-1 bold">Offence Date</b>
+              <p class="mb-2" data-th-text="${'Date: ' +#temporals.format(court_roll_item.court_roll_item_offence_date, 'MMM dd, yyyy') }"></p>
+              <b class="mb-1 bold">Charge Code</b>
+              <p class="mb-2"  data-th-text="${court_roll_item.court_roll_item_charge_code}"></p>
+              <b class="mb-1 bold">Charged Fine</b>
+              <p class="mb-3"  data-th-text="${court_roll_item.court_roll_item_results_fine_amount}<1?'NAG':'R'+${court_roll_item.court_roll_item_results_fine_amount}"></p>
+            </div>
+            <div class="col-md-8 pr-0 pl-0" style="width:250%">
+              <div class="row">
+                <p class="mb-1  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Warrant issued immediately</p>
+                <p class="mb-1  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Removed from court roll</p>
+              </div><div class="row">
+              <p class="mb-1  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Admission of guilt paid</p>
+              <p class="mb-1  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Withdrawn by prosecutor</p>
+            </div><div class="row">
+              <p class="mb-1  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Postponed: Accuse warned</p>
+              <p class="mb-0  pr-0 pl-0 col-md-6"><i class="fa fa-square-o fa-2x mr-1" aria-hidden="true"></i> Reduced by prosecutor</p>
+            </div><div class="row">
+              <div class="col-md-12  text-center">
+                <b class="mb-3 bold">Remarks/Feedback</b>
+                <p><i class="mb-0 muted">Paid amount, Invoice number or New court date</i></p>
+              </div>
+            </div>
+            </div>
+
+
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <b class="mb-1 bold">Charge Description</b>
+              <p class="mb-2"  data-th-text="${court_roll_item.court_roll_item_charge_description}"></p>
+              <b class="mb-1 bold">Charge Regulation</b>
+              <p class="mb-0"  data-th-text="${court_roll_item.court_roll_item_charge_regulation}"></p>
+            </div>
+          </div>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+</body>
+</html>

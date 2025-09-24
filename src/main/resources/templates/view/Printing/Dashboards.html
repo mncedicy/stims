@@ -1,0 +1,237 @@
+<script src="/Scripts/Printing/dashboards.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-2"><b>Dashboards</b></h5>
+                <form action="" autocomplete="off">
+                    <div class="input-group input-group-sm " style="width:600px">
+                        <select class="form-select is-valid" id="cboAccessStatus" data-bs-toggle="tooltip" data-bs-title="Access Status">
+                            <option value="">All</option>
+                            <option selected value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                        <select class="form-select  is-valid" id="cboReportType" data-bs-toggle="tooltip" data-bs-title="Infringement Type" style="width:25%">
+                            <option value="">All</option>
+                            <option value="341 Hand Written">341 Hand Written</option>
+                            <option selected value="Section 56">Section 56</option>
+                            <option value="Section 56 By-law">Section 56 By-law</option>
+                        </select>
+                        <input type="text" autocomplete="off" class="form-control myDaterangepicker validSearch" placeholder="Date Range" style="width:35%" data-bs-toggle="tooltip" data-bs-title="Offence Date Range" />
+                        <a class="btn btn-outline-primary" id="btnSearch"><i class="ti ti-search"></i></a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Total Infringements">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtInfringements">0</h4>
+                                    <p class="mb-0">
+                                        Infringements
+                                        <span class="float-end"><i class="ti ti-file-text text-primary f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Total Fine Amount">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtTotalFine">R0.00</h4>
+                                    <p class="mb-0">
+                                        Total Fine
+                                        <span class="float-end"><i class="ti ti-chart-bar text-primary f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Total Infringements Paid">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtPaid">0</h4>
+                                    <p class="mb-0">
+                                        Paid
+                                        <span class="float-end"><i class="ti ti-report-money text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Total Paid Amount">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtPaidFine">R0.00</h4>
+                                    <p class="mb-0">
+                                        Paid Fine
+                                        <span class="float-end"><i class="ti ti-trending-up text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card" data-bs-toggle="tooltip" data-bs-title="Non-Admission of Guilt Infringements">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtNAG">0</h4>
+                                    <p class="mb-0">
+                                        NAG
+                                        <span class="float-end"><i class="ti ti-hand-stop text-danger f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12 col-xl-8">
+                    <h5 class="mb-3">Infringements Overview</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3 align-items-center">
+                                <div class="col">
+                                    <p class="mb-1 text-muted">Compare</p>
+                                </div>
+                                <div class="col-auto">
+                                    <ul class="nav nav-pills justify-content-end mb-0" id="income-tab-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="income-tab-profile-tab" data-bs-toggle="pill" data-bs-target="#income-tab-profile" type="button" role="tab" aria-controls="income-tab-profile" aria-selected="true">Officer</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="income-tab-home-tab" data-bs-toggle="pill" data-bs-target="#income-tab-home" type="button" role="tab" aria-controls="income-tab-home" aria-selected="false" tabindex="-1">Charge</button>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                            </div>
+                            <div class="tab-content" id="income-tab-tabContent">
+                                <div class="tab-pane show active" id="income-tab-profile" role="tabpanel" aria-labelledby="income-tab-profile-tab" tabindex="0">
+                                    <div id="chartOfficer" style="min-height: 370px;"></div></div>
+                                <div class="tab-pane" id="income-tab-home" role="tabpanel" aria-labelledby="income-tab-home-tab" tabindex="0">
+                                    <div id="chartCharge" style="min-height: 370px;"></div></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 col-xl-4">
+                    <h5 class="mb-3 d-flex">
+                        <div class="flex-grow-1 me-2">
+                            Target per Officer
+                        </div>
+                        <div class="flex-shrink-0 me-1 text-end text-primary txtOfficerTarget">
+                            0
+                        </div>
+                    </h5>
+                    <div class="card">
+                        <div class="list-group list-group-flush">
+<!--                            <a href="#" class="list-group-item list-group-item-action">-->
+<!--                            <div class="d-flex">-->
+<!--                                <div class="flex-grow-1 me-2">-->
+<!--                                    <h6 class="mb-1">Avarage Head Count</h6>-->
+<!--                                    <p class="mb-0 txtAvgHeadCountAboveBelow">.</p>-->
+<!--                                </div>-->
+<!--                                <div class="flex-shrink-0 text-end">-->
+<!--                                    <h6 class="mb-1 text-primary txtAvgHeadCount">0</h6>-->
+<!--                                    <p class="mb-0 txtAvgHeadCountPercent">0%</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </a>-->
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 me-2">
+                                        <h6 class="mb-1 ">Highest performer</h6>
+                                        <p class="mb-0 text-muted txtHighestName">.</p>
+                                    </div>
+                                    <div class="flex-shrink-0 text-end">
+                                        <h6 class="mb-1 text-primary txtHighestCount">0</h6>
+                                        <p class="mb-0 text-muted txtHighestPercent">0%</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 me-2">
+                                        <h6 class="mb-1">Lowest performer</h6>
+                                        <p class="mb-0 text-muted txtLowestName">.</p>
+                                    </div>
+                                    <div class="flex-shrink-0 text-end">
+                                        <h6 class="mb-1 text-primary txtLowestCount">0</h6>
+                                        <p class="mb-0 text-muted txtLowestPercent" >0%</p>
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+
+
+                    <div class="card-body p-0">
+                        <div id="chartOfficerPie" style="width: 100%; min-height: 285px;">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="dt-responsive" style="display:none">
+                <table id="tblNotice" class="table table-xs nowrap table-hover">
+                    <thead>
+                    <tr class="border-bottom">
+                        <th>#</th>
+                        <th>References</th>
+                        <th>Registration</th>
+                        <th>Driver</th>
+                        <th>Officer</th>
+                        <th>Charge Code</th>
+                        <th>Date</th>
+                        <th>
+                            <a href="#!" id="btnExport" class="btn btn-outline-primary btn-small disabled"  data-bs-toggle="tooltip" data-bs-title="Export to Excel or PDF">Export</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="listReport"></tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
