@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/Content/assets/images/favicon.png" type="image/x-icon">
+    <title>Stims</title>
+
+
+    <link rel="stylesheet" href="/Content/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="/Content/Site.css">
+
+    <script src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <script src="/Scripts/Shared/manageCookie.js"></script>
+    <script src="/Scripts/Shared/commonFunctions.js"></script>
+    <script src="/Scripts/Shared/https.js"></script>
+
+</head>
+
+<body>
+
+
+<div class="container" style="margin-top: -15px">
+
+
+    <div th:if="${type == 'success'}" class="row content-center">
+        <div class="col-md-5">
+            <div class="message-box _success">
+                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                <h2> Your payment was successful </h2><br>
+                <p> Thank you for your payment. </p>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+
+    <div th:if="${type == 'failure'}"  class="row content-center">
+        <div class="col-md-5">
+            <div class="message-box _success _failed">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                <h2> Payment failed </h2> <br>
+                <p>  Try again later </p>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div th:if="${type == 'cancel'}"  class="row content-center">
+        <div class="col-md-5">
+            <div class="message-box _success _cancelled">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                <h2> Payment cancelled </h2> <br>
+                <p>  Try again later </p>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

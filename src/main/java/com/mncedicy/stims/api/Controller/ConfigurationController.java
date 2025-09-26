@@ -1,20 +1,37 @@
 package com.mncedicy.stims.api.Controller;
 
+import com.google.gson.Gson;
 import com.mncedicy.stims.api.Classes.*;
+import com.mncedicy.stims.api.Classes.IKhokha.PayRequest;
+import com.mncedicy.stims.api.Classes.IKhokha.PayResponse;
 import com.mncedicy.stims.api.Model.*;
 import com.mncedicy.stims.api.Repo.*;
 import com.mncedicy.stims.api.Services.EmailServiceImpl;
+import com.mncedicy.stims.api.Services.IKhokhaPayService;
 import com.mncedicy.stims.api.Services.TwilioService;
+import jakarta.mail.Header;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 @SuppressWarnings("ALL")
@@ -38,9 +55,14 @@ public class ConfigurationController {
 
     @Autowired
     private NoticeRepo noticeRepo;
+    @Autowired
+    private IkhokhaPaymentRepo ikhokhaPaymentRepo;
 
     @Autowired
     private TwilioService twilioService;
+
+    @Autowired
+    private IKhokhaPayService iKhokhaPayService;
 
     @GetMapping(value = "/welcome")
     public String getPage(){
@@ -134,21 +156,73 @@ public class ConfigurationController {
     }
 
 
-    @PostMapping(value = "/payment/webhook/callback")
-    public Response payment(@RequestBody PayResponse res){
+    @PostMapping(value = "/payment1")
+    public Response payment1(@RequestBody PayRequest data) throws URISyntaxException {
         Response response = new Response();
-        response.setStatus("Error");
-        System.out.println(res);
-        try {
-            response.setData("");
-            response.setMessage("Successfully Saved");
-            response.setStatus("Success");
-        }catch (Exception e){
-            response.setMessage(e.getMessage());
-        }
+        System.out.println(data);
+        System.out.println(data.externalEntityID);
+        response.setData(data);
+        String requestUrl = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();
+        URI uri = new URI(requestUrl);
+        response.setMessage(uri.resolve("/").toString());
+        response.setStatus("Success");
         return response;
 
     }
+
+
+    @PostMapping(value = "/payment")
+    public Response payment(@RequestBody PayRequest payRequest)  {
+        Response response = iKhokhaPayService.payment(payRequest);
+        if(response.getStatus().equals("Success")){
+            PayResponse payResponse = (PayResponse) response.getData();
+            ikhokha_payment payment= new ikhokha_payment();
+            payment.ikhokha_payment_amount = payRequest.amount;
+            payment.ikhokha_payment_fine = ((double) payRequest.amount)/100;
+            payment.ikhokha_payment_client_id = Integer.parseInt(payRequest.externalEntityID);
+            payment.ikhokha_payment_description = payRequest.externalTransactionID;
+            payment.ikhokha_payment_entity_id = payRequest.entityID;
+            payment.ikhokha_payment_external_entity_id = payRequest.externalEntityID;
+            payment.ikhokha_payment_external_transaction_id = payRequest.externalTransactionID;
+            payment.ikhokha_payment_notice_reference = payRequest.externalTransactionID;
+            payment.ikhokha_payment_status = "UNPAID";
+            payment.ikhokha_payment_timestamp = LocalDateTime.now();
+            payment.ikhokha_payment_paylink_id = payResponse.paylinkID;
+            payment.ikhokha_payment_paylink_url = payResponse.paylinkUrl;
+            payment.ikhokha_payment_response_code = payResponse.responseCode;
+            payment.ikhokha_payment_message = payResponse.message;
+            List<ikhokha_payment> payments = ikhokhaPaymentRepo.findByPayLinkId(payResponse.paylinkID);
+            if(payments.isEmpty())
+                payment = ikhokhaPaymentRepo.save(payment);
+            response.setData(payment);
+        }
+
+        return response;
+    }
+
+    @GetMapping(value = "/getPaymentStatus")
+    public Response getPaymentStatus(@RequestParam String paylinkId)  {
+
+        return iKhokhaPayService.getPaymentStatus(paylinkId);
+
+    }
+
+    @GetMapping(value = "/getPaymentHistory")
+    public Response getPaymentHistory(@RequestParam String startDate,@RequestParam String endDate)  {
+
+        return iKhokhaPayService.getPaymentHistory(startDate,endDate);
+
+    }
+
+    @PostMapping("/payment/webhook/callback")
+    public Object handleWebhook(@RequestBody PayResponse payload) {
+        // Process the incoming webhook payload here
+        System.out.println("Received webhook payload: " + payload);
+        return payload;
+    }
+
+
+
 
 
     @PostMapping(value = "/saveRule")

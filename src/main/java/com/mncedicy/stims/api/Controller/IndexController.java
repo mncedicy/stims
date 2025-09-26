@@ -134,5 +134,22 @@ public class IndexController {
         return "view/layout";
     }
 
+    @RequestMapping("/payment/success")
+    public String paymentSuccess(Model model){
+        model.addAttribute("type","success");
+        return "view/Payment/Results";
+    }
+    @RequestMapping("/payment/failure")
+    public String paymentFailure(Model model){
+        model.addAttribute("type","failure");
+        return "view/Payment/Results";
+    }
+    @RequestMapping("/payment/cancel")
+    public String paymentCancel(Model model){
+        model.addAttribute("type","cancel");
+        return "view/Payment/Results";
+    }
+
+
 
 }

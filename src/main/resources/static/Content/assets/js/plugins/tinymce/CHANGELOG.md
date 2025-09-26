@@ -3045,7 +3045,7 @@ Npm version bump due to package not being fully updated.
 ## 4.2.6 - 2015-09-28
 
 ### Added
-- Added capability to set request headers when using XHRs.
+- Added capability to set payRequest headers when using XHRs.
 - Added capability to upload local images automatically default delay is set to 30 seconds after editing images.
 - Added commands ids mceEditImage, mceAchor and mceMedia to be avaiable from execCommand.
 - Added Edge browser to saucelabs grunt task. Patch contributed by John-David Dalton.
@@ -3315,7 +3315,7 @@ Npm version bump due to package not being fully updated.
 ## 4.1.3 - 2014-07-29
 
 ### Added
-- Added event binding logic to tinymce.util.XHR making it possible to override headers and settings before any request is made.
+- Added event binding logic to tinymce.util.XHR making it possible to override headers and settings before any payRequest is made.
 
 ### Fixed
 - Fixed bug where drag events wasn't fireing properly on older IE versions since the event handlers where bound to document.
