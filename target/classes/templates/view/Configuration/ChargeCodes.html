@@ -1,0 +1,46 @@
+
+<script src="/Scripts/Configuration/chargeCodes.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-0"><b>Charge Codes</b></h5>
+                <div>
+                    <button type="button" style="display: none !important" id="btnUpload" class="btn btn-outline-primary btn-sm d-inline-flex pull-right">Upload File</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex pull-right">New Charge Code</button>
+                    <input type="file" id="fileUpload" hidden="hidden" />
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+
+
+
+            <div class="dt-responsive">
+                <table id="dom-jqry" class="table table-hover table-xs nowrap">
+                    <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Fine</th>
+                        <th>Short Description</th>
+                        <th>Vehicle Type</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listChargeCodes"></tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+

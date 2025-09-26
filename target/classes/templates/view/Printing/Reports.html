@@ -1,0 +1,204 @@
+<script src="/Scripts/Printing/reports.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-2"><b>Reports</b></h5>
+                <form action="" autocomplete="off">
+                    <div class="input-group input-group-sm " style="width:600px">
+                        <select class="form-select is-valid" id="cboAccessStatus" data-bs-toggle="tooltip" data-bs-title="Access Status">
+                            <option value="">All</option>
+                            <option selected value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                        <select class="form-select is-valid" id="cboReportType" data-bs-toggle="tooltip" data-bs-title="Infringement Type" style="width:25%">
+                            <option value="">All</option>
+                            <option value="341 Hand Written">341 Hand Written</option>
+                            <option selected value="Section 56">Section 56</option>
+                            <option value="Section 56 By-law">Section 56 By-law</option>
+                        </select>
+                        <input type="text" autocomplete="off" class="form-control myDaterangepicker validSearch" placeholder="Date Range" style="width:35%" data-bs-toggle="tooltip" data-bs-title="Offence Date Range" />
+                        <a class="btn btn-outline-primary" id="btnSearch"><i class="ti ti-search"></i></a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-lg col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtInfringements">0</h4>
+                                    <p class="mb-0">
+                                        Infringements
+                                        <span class="float-end"><i class="ti ti-file-text text-primary f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtTotalFine">R0.00</h4>
+                                    <p class="mb-0">
+                                        Total Fine
+                                        <span class="float-end"><i class="ti ti-chart-bar text-primary f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtPaid">0</h4>
+                                    <p class="mb-0">
+                                        Paid
+                                        <span class="float-end"><i class="ti ti-report-money text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtPaidFine">R0.00</h4>
+                                    <p class="mb-0">
+                                        Paid Fine
+                                        <span class="float-end"><i class="ti ti-trending-up text-success f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h4 class="mb-1 txtNAG">0</h4>
+                                    <p class="mb-0">
+                                        NAG
+                                        <span class="float-end"><i class="ti ti-hand-stop text-danger f-20"></i></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="dt-responsive">
+                <table id="tblNotice" class="table table-xs nowrap table-hover">
+                    <thead>
+                    <tr class="border-bottom">
+                        <th>#</th>
+                        <th>References</th>
+                        <th>Registration</th>
+                        <th>Driver</th>
+                        <th>Officer</th>
+                        <th>Charge Code</th>
+                        <th>Date</th>
+                        <th>
+                            <a href="#!" id="btnExport" class="btn btn-outline-primary btn-small disabled" data-bs-toggle="tooltip" data-bs-title="Export to Excel or PDF">Export</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="listReport"></tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade modal-animate" id="printReportModal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalTitle" class="modal-title text-capitalize">Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body text-muted p-4 text-center pb-2">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <div class="form-floating">
+
+                            <select class="form-control  requiredReport" placeholder="" id="cboDocumentType">
+                                <option value="">Select</option>
+                                <option value="PDF">PDF</option>
+                                <option value="Excel">Excel</option>
+                            </select>
+                            <label for="cboDocumentType">Document Type</label>
+                        </div>
+
+
+                        <!-- /.input group -->
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-12 divGrouping">
+                    <div class="mb-3">
+                        <div class="form-floating">
+
+                            <select class="form-control" placeholder="" id="cboGrouping">
+                                <option value="All" selected>No Grouping</option>
+                                <option value="Traffic Officer">Traffic Officer</option>
+                                <option value="Notice Type">Notice Type</option>
+                                <option value="Charge Code">Charge Code</option>
+                                <option value="Captured By">Captured By</option>
+                                <option value="Offence Date">Offence Date</option>
+                                <option value="Offence Month">Offence Month</option>
+                                <option value="Notice Status">Notice Status</option>
+                            </select>
+                            <label for="cboGrouping">Grouping</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSubmitReport" class="btn btn-primary shadow-2">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

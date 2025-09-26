@@ -1,0 +1,199 @@
+
+    <script src="/Scripts/Home/roles.js"></script>
+
+    <div class="col-sm-12">
+        <div class="card" >
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-end">
+                    <h5 class="mb-0"><b>Role Management</b></h5>
+                    <button type="button" id="btnAddNew" class="btn btn-outline-primary btn-sm d-inline-flex pull-right">New Role</button>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="dt-responsive">
+                    <table id="dom-jqry" class="table table-striped table-bordered nowrap">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Role Name</th>
+                            <th>Description</th>
+                            <th>Landing Page</th>
+                            <th>Status</th>
+                            <th>Privileges</th>
+                            <th class="text-center clsAction">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tblRole">
+
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-animate" style="overflow-y:auto" id="addRoleModal" tabindex="-1"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg" style="height:100%;margin-top:0px;margin-bottom:0px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="stepwizard pb-0">
+                        <div class="stepwizard-row setup-panel">
+                            <div class="stepwizard-step col-xs-3">
+                                <a href="#step-1" type="button" id="step1" class="btn border btn-primary btn-circle">1</a>
+                                <p class="mb-1"><small>Role Details</small></p>
+                            </div>
+                            <div class="stepwizard-step col-xs-3">
+                                <a href="#step-2" type="button" id="step2" class="btn border btn-light btn-circle">2</a>
+                                <p class="mb-1"><small>Privileges</small></p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" style="min-height:300px">
+
+
+                    <div class="col-md-12 mt-0">
+
+                        <div class="container">
+
+                            <form role="form">
+                                <div class="panel panel-primary setup-content" id="step-1">
+
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-floating">
+                                                        <select class="form-control  clsRole" placeholder="" id="clsRoleCategory">
+                                                            <option selected value="">Select</option>
+                                                            <option value="General">General</option>
+                                                            <option value="Management">Management</option>
+                                                            <option value="Officer">Officer</option>
+                                                        </select>
+                                                        <label for="clsRoleCategory">Role Category</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <div class="form-floating">
+                                                        <input id="txtRoleName" type="text" placeholder="" class="form-control clsRole">
+                                                        <label for="txtRoleName">Role Name</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div class="mb-3">
+                                                    <div class="form-floating">
+                                                        <select class="form-control  clsRole" placeholder="" id="cboRoleLanding">
+                                                            <option selected value="">Select</option>
+                                                            <option value="/Home">Home Dashboard</option>
+                                                            <option value="/Management/Infringements">Infringement Management</option>
+                                                            <option value="/Management/Officer">Traffic Officer Dashboard</option>
+                                                            <option value="/Capturing/Notice">Notice Capturing</option>
+                                                            <option value="/Capturing/Book">Book Capturing</option>
+                                                            <option value="/Printing/CourtRoll">Court Register</option>
+                                                            <option value="/Printing/Reports">Reporting</option>
+                                                        </select>
+                                                        <label for="cboRoleLanding">Landing Page</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md divTarget" style="display:none">
+                                                <div class="mb-3">
+                                                    <div class="form-floating">
+                                                        <input id="txtTarget" type="number" placeholder="" class="form-control">
+                                                        <label for="txtTarget">Target per Month</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="mb-3">
+                                                    <div class="form-floating">
+                                                        <textarea class="form-control" placeholder="" id="txtRoleDescription" style="height: 150px" spellcheck="true"></textarea>
+                                                        <label for="txtRoleDescription">Role Description</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-primary setup-content" id="step-2">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <ul class="nav nav-tabs profile-tabs flex-grow-1" id="myTab" role="tablist">
+                                                <li class="nav-item" role="presentation"><a class="nav-link pt-0  active" id="profile11" data-bs-toggle="tab" href="#administration" role="tab" aria-selected="false" tabindex="-1">Administration</a></li>
+                                                <li class="nav-item" role="presentation"><a class="nav-link pt-0" id="profile-tab-21" data-bs-toggle="tab" href="#management" role="tab" aria-selected="true">Management</a></li>
+                                                <li class="nav-item" role="presentation"><a class="nav-link pt-0" id="profile-tab-31" data-bs-toggle="tab" href="#capturing" role="tab" aria-selected="false" tabindex="-1">Capturing</a></li>
+                                                <li class="nav-item" role="presentation"><a class="nav-link pt-0" id="profile-tab-41" data-bs-toggle="tab" href="#configuration" role="tab" aria-selected="false" tabindex="-1">Configuration</a></li>
+                                                <li class="nav-item" role="presentation"><a class="nav-link pt-0" id="profile-tab-51" data-bs-toggle="tab" href="#printing" role="tab" aria-selected="false" tabindex="-1">Printing</a></li>
+
+                                            </ul>
+                                            <div class="col-lg-12">
+
+                                                <div class="col-lg-12">
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active show" id="administration" role="tabpanel" aria-labelledby="administration">
+                                                            <div class="m-4">
+                                                                <div class="list-group list-group-horizontal-sm row">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="management" role="tabpanel" aria-labelledby="management">
+                                                            <div class="m-4">
+                                                                <div class="list-group list-group-horizontal-sm row">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="capturing" role="tabpanel" aria-labelledby="capturing">
+                                                            <div class="m-4">
+                                                                <div class="list-group list-group-horizontal-sm row">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="tab-pane" id="configuration" role="tabpanel" aria-labelledby="configuration">
+                                                            <div class="m-4">
+                                                                <div class="list-group list-group-horizontal-sm row">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="tab-pane" id="printing" role="tabpanel" aria-labelledby="printing">
+                                                            <div class="m-4">
+                                                                <div class="list-group list-group-horizontal-sm row">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnSubmitRole" class="btn btn-primary nextBtn shadow-2">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<style>
+  .bold {
+    font-weight: bold;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  .bolder {
+    font-weight: 600;
+  }
+
+  .card {
+    border-radius: 0px;
+  }
+
+  .muted {
+    color: #d4d4d4 !important
+  }
+
+  .b-gray {
+    background: #f3f3f3 !important;
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  .f12 {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding-left: 10px;
+  }
+
+  .total {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+  }
+</style>
+
+<body>
+
+  <div class="col-md-12">
+    <h6 class="row text-center bold" data-th-text="${'Payment Report - '+grouping}"></h6>
+    <div class="card pb-1" style="font-size: 13px;">
+      <div class="card-body  mb-0 pb-0 f-10">
+        <ul class="list-group list-group-flush mb-0 pb-0 pb-0 pt-0">
+          <li class="list-group-item px-0 pt-0 pb-0  mb-0 pb-0 pb-0 pt-0">
+            <div class="row mb-0 pb-0 pb-0 pt-0">
+              <div class="col-md-6  mb-0 pb-0 pr-0" style="width:120%">
+                <b class="mb-1 bold">Start Date</b>
+                <p class="mb-2" data-th-text="${startDate}"></p>
+                <p class="mb-1">
+                  <b class="bold">Total Paid Amount: </b>
+                  <b data-th-text="${'R'+amountAll}"></b>
+                </p>
+
+              </div>
+              <div class="col-md-6  mb-0 pb-0 pr-0" style="width:120%">
+                <b class="mb-1 bold">End Date</b>
+                <p class="mb-2" data-th-text="${endDate}"></p>
+                <p class="mb-1">
+                  <b class="bold">Total Invoices: </b>
+                  <b data-th-text="${countAll}"></b>
+                </p>
+
+
+
+              </div>
+
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <img data-th-src="${'data:image/png;base64,'+chart}" alt="barcode" style="height:300px;width:100%" src="" />
+
+
+  </div>
+
+  <div data-th-each="notice, iteration : ${noticeList}" class="item last p-3 pb-1">
+    <p class="m-0 p-1 mb-1 b-gray">
+      <b class="bold" data-th-text="${groupings.get(iteration.index)}"></b>
+      <b class="pull-right bold mr-1" data-th-text="${notice.size()}"></b>
+    </p>
+
+    <div class="pl-1 f12">
+      <table style="width:100%">
+        <thead>
+          <tr>
+            <th>Invoice No.</th>
+            <th>Collected By</th>
+            <th>Paid By</th>
+            <th>Type</th>
+            <th>Tickets</th>
+            <th>Date</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody data-th-each="item, iterationItem : ${notice}">
+          <tr>
+            <td data-th-text="${item.invoice_number}"></td>
+            <td data-th-text="${item.invoice_created_by_name}"></td>
+            <td data-th-text="${item.invoice_name_to}"></td>
+            <td data-th-text="${item.invoice_payment_type}"></td>
+            <td data-th-text="${item.invoice_records}"></td>
+            <td data-th-text="${item.invoice_payment_date}"></td>
+            <td data-th-text="${'R'+item.invoice_amount}"></td>
+          </tr>
+        </tbody>
+        <tr>
+          <td colspan="6"></td>
+          <td class="bold total" data-th-text="${'R'+group_total.get(iteration.index)}"></td>
+        </tr>
+      </table>
+    </div>
+
+
+    <!--  <div data-th-each="item, iterationItem : ${notice}" class="item last pt-0 pb-0 pl-2 row m-0 mb-1" style="font-size: 13px;">-->
+    <!--    <div class="col-md-3 mb-0">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_reference}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_registration}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0" style="width:180%">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_name}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0"  style="width:120%">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_offence_date}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0"  style="width:60%">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_charge_code}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0" style="width:60%">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_final_amount}<1?'NAG':'R'+${item.infringement_notice_final_amount}"></p>-->
+    <!--    </div>-->
+    <!--    <div class="col-md-3 mb-0" style="width:120%">-->
+    <!--      <p class="mb-0" data-th-text="${item.infringement_notice_status}"></p>-->
+    <!--    </div>-->
+
+
+    <!--  </div>-->
+
+  </div>
+
+
+</body>
+
+</html>

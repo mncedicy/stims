@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+</head>
+<style>
+  .bold{font-weight: bold;}
+  .bolder{font-weight: 600;}
+  .card{border-radius: 0px;}
+  .muted{color:#d4d4d4 !important}
+  .page{min-height:1000px;}
+  .f11{font-size: 13px;}
+</style>
+<body >
+
+<div data-th-each="data, iteration : ${infringementDataList}" class="item last page">
+
+<div class="col-md-12">
+
+  <div class="row">
+    <div class="col-md-6">
+      <p class="mb-2 bolder" data-th-text="${data.infringer.infringement_infringer_name+' '+data.infringer.infringement_infringer_surname}"></p>
+      <p class="mb-0" data-th-text="${data.infringer.infringement_infringer_physical_address}"></p>
+      <p class="mb-0" data-th-text="${data.infringer.infringement_infringer_physical_suburb}"></p>
+      <p class="mb-0" data-th-text="${data.infringer.infringement_infringer_physical_city}"></p>
+      <p class="mb-4" data-th-text="${data.infringer.infringement_infringer_physical_code}"></p>
+      <p class="mb-0 bolder f11" data-th-text="${'Letter Date: '+#temporals.format(data.notice.infringement_notice_letter_status_date, 'MMM dd, yyyy')}"></p>
+    </div>
+    <div class="col-md-4 text-center">
+      <p class="f11 mb-0">Notice Reference</p>
+      <p class="bolder mb-0" data-th-text="${data.notice.infringement_notice_reference}"></p>
+      <img data-th-src="${'data:image/png;base64,'+barcodes.get(iteration.index)}" alt="barcode" style="height:26px;width:200px"  src=""/>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <h5 style="width:100%" class="col-md-12 text-center bold text-uppercase" data-th-text="${letter_type}"></h5>
+  </div>
+
+  <div class="row mt-3 f11">
+    <div class="col-md-12">
+      <div class="mb-3">
+        <p class="" data-th-text="${'Dear '+data.infringer.infringement_infringer_name+' '+data.infringer.infringement_infringer_surname}"></p>
+      </div>
+
+      <div class="mb-0" th:if="${letter_type=='Courtesy letter'}">
+
+        <div class="mb-3">
+          <span class="mb-0">This letter serves as a reminder concerning Infringement Notice: </span>
+          <span class="mb-0" data-th-text="${data.notice.infringement_notice_reference+','}"></span>
+          <span class="mb-0" data-th-text="${' issued to you on '+ #temporals.format(data.notice.infringement_notice_offence_date, 'MMMM dd, yyyy')+'.'}"></span>
+          <span class="mb-0"> You have failed to comply with the conditions of an Infringement Notice issued to you.</span>
+        </div>
+        <div class="mb-3">
+          <span class="mb-0"><b class="bolder">Please note: </b>The original fine amount was </span>
+          <span class="mb-0" data-th-text="${'R '+data.notice.infringement_notice_fine_amount}"></span>
+          <span class="mb-0" data-th-text="${' and an additional fee of R'+client.client_courtesy_amount+' has been added for the courtesy letter. '}"></span>
+          <span class="mb-0" data-th-text="${'The total amount due is now R'+data.notice.infringement_notice_final_amount+'.'}"></span>
+          <span class="mb-0"> You have 32 days from the date of this letter to make payment or respond.</span>
+        </div>
+        <div class="mb-3">
+          <span class="mb-0"><b class="bolder">Please note: </b>The original fine amount was </span>
+          <p class="mb-0">Failure to comply with this courtesy letter within 32 days may result in the issuance of an enforcement order. This may include additional penalties and costs, including a warrant for your arrest.</p>
+        </div>
+
+      </div>
+
+
+      <div class="mb-0" th:if="${letter_type=='Enforcement Order'}">
+
+        <div class="mb-3">
+          <span class="mb-0">This letter serves as an enforcement order following your failure to comply with the infringement notice: </span>
+          <span class="mb-0" data-th-text="${data.notice.infringement_notice_reference} +' (or courtesy letter),'"></span>
+          <span class="mb-0" data-th-text="${' issued to you on '+ #temporals.format(data.notice.infringement_notice_offence_date, 'MMMM dd, yyyy')+','}"></span>
+          <span class="mb-0"> regarding the traffic offence.</span>
+        </div>
+        <div class="mb-3">
+          <span class="mb-0"><b class="bolder">Please note: </b>You are hereby required to pay the penalty, the prescribed fees for the courtesy letter (if applicable), and the enforcement order fee of </span>
+          <span class="mb-0" data-th-text="${'R '+client.client_enforcement_amount+','}"></span>
+          <span class="mb-0" data-th-text="${' the total amount of R'+data.notice.infringement_notice_final_amount}"></span>
+          <span class="mb-0"> in the specified manner, within 32 days from the date of this letter.</span>
+        </div>
+        <div class="mb-3">
+          <p class="mb-0">Failure to comply with this enforcement order within the specified timeframe will result in a warrant being issued for the recovery of the applicable penalty and fees.</p>
+        </div>
+
+      </div>
+
+
+      <div class="mb-0" th:if="${letter_type=='Warrant Letter'}">
+
+        <div class="mb-3">
+          <span class="mb-0">This letter serves as a notice of warrant of arrest following your failure to comply with the infringement notice: </span>
+          <span class="mb-0" data-th-text="${data.notice.infringement_notice_reference} +','"></span>
+          <span class="mb-0" data-th-text="${' issued to you on '+ #temporals.format(data.notice.infringement_notice_offence_date, 'MMMM dd, yyyy')+','}"></span>
+          <span class="mb-0"> regarding the traffic offence.</span>
+        </div>
+        <div class="mb-3">
+          <span class="mb-0">You have failed to appear in court on </span>
+          <span data-th-text="${#temporals.format(data.notice.infringement_notice_offence_date, 'MMMM dd, yyyy')}"></span>
+          <span class="mb-0"> for trial and a warrant of arrest has been authorized. To avoid being arrested present yourself at </span>
+          <span class="mb-0" data-th-text="${data.notice.infringement_notice_court_name}"></span>
+          <span class="mb-0"> without delay to make arrangements for your appearance in court or pay the outstanding fine amount immediately.</span>
+        </div>
+
+      </div>
+
+
+      <div class="mb-4">
+        <span class="mb-1 bold">Charge: </span>
+        <span class="mb-1"  data-th-text="${data.charge_code.charge_code_description}"></span>
+      </div>
+
+      <div class="row">
+        <div class="col-md-7">
+          <p class="mb-2">Sincerely,</p>
+          <p class="mb-0" data-th-text="${client.client_name}"></p>
+          <p class="mb-0" data-th-text="${client.client_address}"></p>
+          <p class="mb-0" data-th-text="${client.client_email}"></p>
+          <p class="mb-0" data-th-text="${client.client_phone}"></p>
+          <p class="mb-0" data-th-text="${client.client_hour_opening+' - '+client.client_hour_closing}"></p>
+        </div>
+
+      </div>
+    </div>
+
+
+
+  </div>
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>

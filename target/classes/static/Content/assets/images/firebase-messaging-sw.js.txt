@@ -1,0 +1,30 @@
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getMessaging, getToken  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-messaging.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBW3i8WFe4pd6F1VPgqNsxYS6wwCAyLcBY",
+            authDomain: "stims-3c1a2.firebaseapp.com",
+            projectId: "stims-3c1a2",
+            storageBucket: "stims-3c1a2.firebasestorage.app",
+            messagingSenderId: "300497694757",
+            appId: "1:300497694757:web:8d099822c93e1a642acfcc"
+        };
+
+ firebase.initializeApp(firebaseConfig);
+
+ // Retrieve firebase messaging
+ const messaging = firebase.messaging();
+
+ messaging.onBackgroundMessage(function(payload) {
+   console.log("Received background message ", payload);
+
+   const notificationTitle = payload.notification.title;
+   const notificationOptions = {
+     body: payload.notification.body,
+   };
+
+   self.registration.showNotification(notificationTitle, notificationOptions);
+ });

@@ -1,0 +1,466 @@
+<script src="/Scripts/Management/officer.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+<!--        <div class="card-header">-->
+<!--        <div class="d-flex justify-content-between align-items-end">-->
+<!--            <h5 class="mb-0"><b>Traffic Officer</b></h5>-->
+<!--            <a class="btn btn-outline-primary btn-sm" id="btnMyBooks">My Books</a>-->
+<!--        </div>-->
+
+<!--    </div>-->
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-xl-4 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <h5 class="m-b-20">Books Recieved</h5>
+
+                                <div class="col">
+                                    <h3 class="txtBooks">0</h3>
+                                    <p class="m-b-0"><span class="txtHanded">0</span> Handed-in</p>
+                                </div>
+                                <div class="col">
+                                                <span class="badge bg-light-success border border-success fs-5">
+<!--                                                    <i class="ti ti-trending-up"></i>-->
+                                                    <span class="txtHandedPercent">0</span>
+                                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <h5 class="m-b-20">Notices</h5>
+
+                                <div class="col">
+                                    <h3 class="txtNotices">0</h3>
+                                    <p class="m-b-0"><span class="txtCaptured">0</span> Captured</p>
+                                </div>
+                                <div class="col">
+                                                <span class="badge bg-light-warning border border-warning fs-6">
+<!--                                                    <i class="ti ti-trending-down"></i>-->
+                                                    <span class="txtCapturedPercent">0</span>
+                                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <h5 class="m-b-20">Captured</h5>
+
+                                <div class="col">
+                                    <h3 class="txtCapturedAll">25</h3>
+                                    <p class="m-b-0"><span class="txtClosed">0</span> Closed</p>
+                                </div>
+                                <div class="col">
+                                                <span class="badge bg-light-danger border border-danger fs-6">
+<!--                                                    <i class="ti ti-trending-down"></i>-->
+                                                    <span class="txtClosedPercent">0</span>
+                                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+
+
+                <div class="col-sm-12">
+                    <div class="dt-responsive">
+                        <table id="dom-jqry" class="table table-hover table-xs nowrap">
+                            <thead>
+
+                            <tr>
+                                <th>#</th>
+                                <th>Book Type</th>
+                                <th>First Notice</th>
+                                <th>Last Notice</th>
+                                <th>Pages</th>
+                                <th>Captured</th>
+                                <th>Status</th>
+                                <th>Issue Date</th>
+                                <th>Handin Date</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listBooks"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade modal-animate" id="noticeListModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-fullscreen" style="height:100%;margin-top:0px;margin-bottom:0px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row mb-4">
+                    <div class="col-md-3 border-r">
+                        <div class="row text-center">
+                            <span class="m-b-5 text-muted">First Notice</span>
+                            <div class="col">
+                                <h5 class="txtFirstPage">13</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 border-r">
+                        <div class="row text-center">
+                            <span class="m-b-5 text-muted">Last Notice</span>
+                            <div class="col">
+                                <h5 class="txtLastPage">13</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 border-r">
+                        <div class="row text-center">
+                            <span class="m-b-5 text-muted">Total Pages</span>
+                            <div class="col">
+                                <h5 class="txtBookPages">13</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row text-center">
+                            <span class="m-b-5 text-muted">Captured</span>
+                            <div class="col">
+                                <h5 class="txtCompleted">13</h5>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="dt-responsive">
+                    <table id="tblNotice" class="table table-xs nowrap table-hover">
+                        <thead>
+                        <tr class="border-bottom">
+                            <th>#</th>
+                            <th>References</th>
+                            <th>Registration</th>
+                            <th>Driver</th>
+                            <th>Captured By</th>
+                            <th>Charge</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="listNotice"></tbody>
+
+                    </table>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade modal-animate" style="overflow-y:auto" id="addNoticeModal" tabindex="-1"
+     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+<!--            <div class="modal-header">-->
+<!--            <h5 class="modal-title">Notice Details</h5>-->
+<!--            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>-->
+<!--        </div>-->
+
+            <div class="modal-body" style="min-height:435px">
+
+
+                <div class="col-md-12 mt-3">
+
+                    <div class="container">
+                        <div class="stepwizard pb-3">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-1" type="button" id="step1" class="btn border btn-primary btn-circle">1</a>
+                                    <p><small>Notice Details</small></p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-2" type="button" id="step2" class="btn border btn-light btn-circle">2</a>
+                                    <p><small>Driver/Vehicle</small></p>
+                                </div>
+                                <div id="divContact" class="stepwizard-step col-xs-3">
+                                    <a href="#step-3" type="button" id="step3" class="btn border btn-light btn-circle">3</a>
+                                    <p><small>Contact Details</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <form role="form">
+                            <div class="panel panel-primary setup-content" id="step-1">
+
+                                <div class="panel-body">
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+
+                                                    <select class="form-control  cleanField" disabled="disabled" placeholder="" id="cboNoticeType1">
+                                                        <option data-notice="999999" value="10">341 Hand Written</option>
+                                                        <option data-notice="999999" selected value="50">Section 56</option>
+                                                        <option data-notice="9999" value="51">Section 56 By-law</option>
+                                                    </select>
+                                                    <label for="cboNoticeType1">Notice Type</label>
+                                                </div>
+
+
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+
+                                                    <input id="txtNoticeReference1" disabled="disabled" placeholder="" type="text" class="form-control">
+                                                    <label for="txtNoticeReference1">Notice Reference</label>
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+                                                    <select id="cboChargeCode" multiple data-placeholder="Charge Code" class="form-control js-choice requiredNotice1 requiredNotice"></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+
+                                                    <input id="txtOffenceDate" maxlength="8" placeholder="" type="text" class="form-control requiredNotice1 requiredNotice  myDatepicker">
+                                                    <label for="txtOffenceDate">Offence Date</label>
+
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+
+                                                    <select class="form-control requiredNotice requiredNotice1" placeholder="" id="cboCourtName">
+                                                        <option disabled="disabled" selected value="">Select</option>
+                                                    </select>
+                                                    <label for="cboCourtName">Court Name</label>
+
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <div class="form-floating">
+
+                                                    <input id="txtCourtDate" maxlength="8" type="text" placeholder="" class="form-control requiredNotice requiredNotice1 myDatepicker">
+                                                    <label for="txtCourtDate">Court Date</label>
+
+                                                </div>
+                                                <!-- /.input group -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 mb-3">
+                                            <div class="form-floating">
+                                                <input id="txtOffenceLocation" type="text" placeholder="" class="form-control requiredNotice1 requiredNotice">
+                                                <label for="txtOffenceLocation">Offence Location</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <div class="form-floating">
+                                                <input id="txtOffenceLocationCode" type="number" placeholder="" maxlength="4" class="form-control requiredNotice1 requiredNotice">
+                                                <label for="txtOffenceLocationCode">Postal Code</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-primary setup-content" id="step-2">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3 cls341">
+                                            <div class="form-floating">
+                                                <input id="txtIDNumber" placeholder="" type="text" class="form-control triggers">
+                                                <label for="txtIDNumber">ID Number</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <input id="txtVehicleRegistration" placeholder="" maxlength="8" type="text" class="form-control text-uppercase requiredNotice2 requiredNotice">
+                                                <label for="txtVehicleRegistration">Vehicle Registration</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341">
+                                            <div class="form-floating">
+                                                <select class="form-control requiredNotice requiredNotice2" placeholder="" id="cboTitle">
+                                                    <option disabled="disabled" selected value="">Select</option>
+                                                    <option value="Mr">Mr</option>
+                                                    <option value="Ms">Ms</option>
+                                                    <option value="Mrs">Mrs</option>
+                                                    <option value="Miss">Miss</option>
+                                                </select>
+                                                <label for="cboTitle">Title</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <select class="form-control requiredNotice requiredNotice2" placeholder="" id="cboVehicleMake">
+                                                    <option disabled="disabled" selected value="">Select</option>
+                                                </select>
+                                                <label for="cboVehicleMake">Vehicle Make</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341">
+                                            <div class="form-floating">
+                                                <input id="txtFirstName" placeholder="" type="text" class="form-control text-uppercase requiredNotice2 requiredNotice">
+                                                <label for="txtFirstName">First Name</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <select class="form-control requiredNotice requiredNotice2" placeholder="" id="cboVehicleModel">
+                                                    <option disabled="disabled" selected value="">Select</option>
+                                                </select>
+                                                <label for="cboVehicleModel">Vehicle Model</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341">
+                                            <div class="form-floating">
+                                                <input id="txtLastName" placeholder="" type="text" class="form-control text-uppercase requiredNotice2 requiredNotice">
+                                                <label for="txtLastName">Last Name</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-floating">
+                                                <select class="form-control requiredNotice requiredNotice2" placeholder="" id="cboVehicleColour">
+                                                    <option disabled="disabled" selected value="">Select</option>
+                                                </select>
+                                                <label for="cboVehicleColour">Vehicle Colour</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-primary setup-content" id="step-3">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtCellphoneNumber" placeholder="" type="text" class="form-control text-uppercase requiredNotice3 requiredNotice">
+                                                <label for="txtCellphoneNumber">Cellphone Number</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtEmailAddress" placeholder="" type="text" class="form-control text-uppercase requiredNotice3 requiredNotice">
+                                                <label for="txtEmailAddress">Email Address</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtPhysicalAddress" placeholder="" type="text" class="form-control text-uppercase requiredNotice3 requiredNotice">
+                                                <label for="txtPhysicalAddress">Physical Address</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtSuburb" placeholder="" type="text" class="form-control text-uppercase requiredNotice3 requiredNotice">
+                                                <label for="txtSuburb">Suburb</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtCity" placeholder="" type="text" class="form-control text-uppercase requiredNotice3 requiredNotice">
+                                                <label for="txtCity">City</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 cls341L">
+                                            <div class="form-floating">
+                                                <input id="txtPostalCode" placeholder="" maxlength="4" type="number" class="form-control requiredNotice3 text-uppercase requiredNotice">
+                                                <label for="txtPostalCode">Postal Code</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div>
+
+
+<!--                    <a href="#!" id="btnMessege" class="btn btn-link-hover-primary btnMessege"-->
+<!--                         data-bs-toggle="offcanvas" data-bs-target="#offcanvas_pc_layout"><i class="ti ti-message"></i></a>-->
+<!--                    -->
+
+                    <a href="#!" id="btnClarity" class="btn btn-link-hover-warning"><i class="ti ti-device-floppy"></i></a>
+
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btnSubmitNotice" class="btn btn-primary nextBtn shadow-2">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->

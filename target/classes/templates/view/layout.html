@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/Content/assets/images/favicon.png" type="image/x-icon">
+    <title>Stims</title>
+<!--    <link rel="stylesheet" href="/Content/bootstrap.min.css"/>-->
+
+
+    <link href="/Content/assets/css/plugins/dropzone.min.css" rel="stylesheet" />
+    <link href="/Content/assets/css/plugins/quill.core.css" rel="stylesheet" />
+    <link href="/Content/assets/css/plugins/quill.snow.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/Content/assets/css/plugins/flatpickr.min.css">
+    <link href="/Content/css2.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/Content/assets/fonts/tabler-icons.min.css">
+    <link rel="stylesheet" href="/Content/assets/fonts/feather.css">
+    <link rel="stylesheet" href="/Content/assets/fonts/fontawesome.css">
+    <link rel="stylesheet" href="/Content/assets/fonts/material.css">
+    <link href="/Content/choices.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/Content/assets/css/style.css" id="main-style-link">
+    <link rel="stylesheet" href="/Content/assets/css/style-preset.css">
+    <link rel="stylesheet" href="/Content/assets/css/plugins/datepicker-bs5.min.css">
+
+    <link rel="stylesheet" href="/Content/Site.css">
+
+    <script src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+
+    <script src="/Content/assets/js/plugins/datepicker-full.min.js"></script>
+    <script src="/Content/assets/js/plugins/simple-datatables.js"></script>
+
+    <script src="/Scripts/jquery.inputmask.bundle.min.js"></script>
+    <script src="/Scripts/xlsx.full.min.js"></script>
+    <script src="/Scripts/jszip.js"></script>
+    <script src="/Scripts/html2canvas.min.js"></script>
+    <script src="/Scripts/jspdf.umd.js"></script>
+    <script src="/Scripts/choices.min.js"></script>
+
+
+
+    <script src="/Scripts/Shared/manageCookie.js"></script>
+    <script src="/Scripts/Shared/commonFunctions.js"></script>
+    <script src="/Scripts/Shared/https.js"></script>
+
+
+</head>
+<style>
+    .bold{font-weight: bold;}
+    .bolder{font-weight: 600;}
+    .muted{color:#d4d4d4 !important}
+    .page{min-height:1000px;}
+    .f11{font-size: 13px;}
+    .center{ justify-content: center;}
+    .cont{width:500px;height:500px}
+</style>
+<body>
+<div class="loader-bg" style="display:block">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+
+<div  th:if="${view != 'view/Login/Index'}" th:insert="~{view/sidebar-header :: sidebar-header}"></div>
+
+<div th:if="${view == 'view/Login/Index'}" th:insert="~{view/Login/Index}"></div>
+
+<div th:insert="~{view/modals :: modals}"></div>
+
+<script src="/Content/assets/js/plugins/popper.min.js"></script>
+<script src="/Content/assets/js/plugins/simplebar.min.js"></script>
+<script src="/Content/assets/js/plugins/bootstrap.min.js"></script>
+<script src="/Content/assets/js/fonts/custom-font.js"></script>
+<script src="/Content/assets/js/pcoded.js"></script>
+<script src="/Content/assets/js/plugins/feather.min.js"></script>
+<script src="/Content/assets/js/plugins/dropzone-amd-module.min.js"></script>
+<script src="/Content/assets/js/plugins/wizard.min.js"></script>
+<script src="/Content/assets/js/plugins/quill.min.js"></script>
+
+<script src="/Content/assets/js/plugins/apexcharts.min.js"></script>
+<script src="/Content/assets/js/pages/dashboard-analytics.js"></script>
+
+<script src="/Content/assets/js/plugins/flatpickr.min.js"></script>
+<script src="/Scripts/calender.index.global.min.js"></script>
+
+
+<script>
+    var choices;
+    const element = document.querySelector('.js-choice');
+    if (element) {
+        choices = new Choices(element,
+            {
+                appendGroupInSearch: true,
+                searchFields: ['label', 'value'],
+                addItems: true,
+                removeItems: true,
+                removeItemButton: true,
+                paste: true,
+                maxItemCount: 1,
+                itemSelectText: '',
+                maxItemText: (maxItemCount) => {
+                    return null;
+                },
+            });
+
+    }
+
+    var optional_config = { dateFormat: 'Y-m-d' };
+    $(".myDatepicker").flatpickr(optional_config);
+
+    var optional_time = {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true
+    };
+    $(".myTimerangepicker").flatpickr(optional_time);
+
+
+    var range = flatpickr('.myDaterangepicker', {
+        mode: 'range',
+        dateFormat: 'Y-m-d',
+        maxDate: "today",
+        showMonths: 2,
+        defaultDate: [new Date().fp_incr(-126), 'today'],
+        onClose: function (selectedDates, dateStr, instance) {
+
+        }
+    });
+    var token = 's';
+
+</script>
+
+
+<script type="module">
+
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-messaging.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    var vapidKey = 'BB2dN-BbywRGA9Zf9Jct6LC3vRWaP45L_gvNEztMP2tCb-3OO22bXnKWSRVHeXYLuB71EAOTJuQ7fzvfDoTdN9A';
+    const firebaseConfig = {
+        apiKey: "AIzaSyBW3i8WFe4pd6F1VPgqNsxYS6wwCAyLcBY",
+        authDomain: "stims-3c1a2.firebaseapp.com",
+        projectId: "stims-3c1a2",
+        storageBucket: "stims-3c1a2.firebasestorage.app",
+        messagingSenderId: "300497694757",
+        appId: "1:300497694757:web:8d099822c93e1a642acfcc"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+   // console.log(app, messaging);
+
+
+    onMessage(messaging, (payload) => {
+     //   console.log('Message received. ', payload);
+        // ...
+    });
+
+    getTokens();
+    function getTokens() {
+        getToken(messaging, { vapidKey: vapidKey }).then((currentToken) => {
+            if (currentToken) {
+                // Send the token to your server and update the UI if necessary
+           //     console.log(currentToken);
+                token = currentToken;
+                // ...
+            } else {
+                // Show permission payRequest UI
+           //     console.log('No registration token available. Request permission to generate one.');
+                // ...
+            }
+        }).catch((err) => {
+         //   console.log('An error occurred while retrieving token. ', err);
+            // ...
+        });
+    }
+
+
+
+</script>
+
+
+
+<script>layout_change('light');</script>
+<script>change_box_container('false');</script>
+<script>layout_rtl_change('false');</script>
+<script>preset_change("preset-1");</script>
+
+
+</body>
+</html>

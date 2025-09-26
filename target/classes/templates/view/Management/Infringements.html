@@ -1,0 +1,614 @@
+<script src="/Scripts/Management/infringements.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <div class="col-md-2"><h5 class="mb-2"><b>Infringements</b></h5></div>
+                <div class="col-md-8">
+                    <form action="" autocomplete="off">
+                        <div class="input-group input-group-sm">
+                            <select class="form-select is-valid" id="cboAccessStatus" data-bs-toggle="tooltip" data-bs-title="Access Status">
+                                <option value="">All</option>
+                                <option selected value="Open">Open</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                            <select class="mb-0 form-select  is-valid" id="cboSearchWith" style="width:20%">
+                                <option value="infringement_notice_reference">Reference</option>
+                                <option value="infringement_notice_id_number" selected>ID Number</option>
+                                <option value="infringement_notice_registration">Registration</option>
+                            </select>
+
+                            <input type="text" value="" autocomplete="off" class="form-control text-uppercase validSearch" id="txtSearch" style="width:35%" placeholder="Type here...">
+                            <button class="btn btn-outline-primary " id="btnSearch" type="button">
+                                <i data-feather="search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-2 text-right">
+                    <a class="btn btn-outline-primary btn-sm d-inline-flex disabled btn-lg linkManage btnPayment" id="btnPayList" data-pay="list" style="float: right;">Payment</a>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-l-0">
+            <div class="dt-responsive">
+                <table id="tblNotice" class="table table-xs nowrap table-hover">
+                    <thead>
+                    <tr class="border-bottom">
+                        <th><div class="form-check"><input id="checkAllNotice" class="form-check-input" type="checkbox"></div></th>
+                        <th>#</th>
+                        <th>References</th>
+                        <th>Registration</th>
+                        <th>ID Number</th>
+                        <th>Driver Name</th>
+                        <th>Fine</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listInfringments"></tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="infringmentModal" data-bs-keyboard="false" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex w-100 align-items-center">
+
+
+                    <ul class="nav nav-tabs profile-tabs flex-grow-1" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation"><a class="nav-link active" id="profile-tab-11" data-bs-toggle="tab" href="#profile-11" role="tab" aria-selected="false" tabindex="-1"><i class="ti ti-user me-2"></i> Infringement</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="profile-tab-21" data-bs-toggle="tab" href="#profile-21" role="tab" aria-selected="true"><i class="ti ti-file-text me-2"></i> Driver Details</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="profile-tab-31" data-bs-toggle="tab" href="#profile-31" role="tab" aria-selected="false" tabindex="-1"><i class="ti ti-id me-2"></i> Charge Code</a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" id="profile-tab-41" data-bs-toggle="tab" href="#profile-41" role="tab" aria-selected="false" tabindex="-1"><i class="ti ti-lock me-2"></i> History</a></li>
+                    </ul>
+                    <a href="#" class="btn btn-link-primary clsInvoice">Payment Reciept</a>
+
+                    <div class="dropdown divManage">
+                        <a class="avtar avtar-s btn-link-secondary dropdown-toggle arrow-none" href="#"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="ti ti-dots-vertical f-18"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item linkManage linkPayment btnPayment" data-pay="one" href="#">Payment</a>
+                            <a class="dropdown-item linkManage btnReduce" href="#">Reduce</a>
+                            <a class="dropdown-item linkManage btnWithdraw" href="#">Withdraw</a>
+                            <a class="dropdown-item linkManage btnNominate" href="#">Nominate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-lg-12">
+
+                    <div class="col-lg-12">
+                        <div class="tab-content">
+                            <div class="tab-pane active show" id="profile-11" role="tabpanel" aria-labelledby="profile-tab-11">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="card">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h5>Notice Details</h5>
+                                                <span class="badge f-12 infringement_notice_status">.</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-0 pt-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Reference</p>
+                                                                <p class="mb-0 infringement_notice_reference">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Payment Due Date</p>
+                                                                <p class="mb-0 infringement_notice_payment_due_date">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Court</p>
+                                                                <p class="mb-0 infringement_notice_court_name">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Fine</p>
+                                                                <p class="mb-0 text-danger infringement_notice_final_amount">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Offence Date</p>
+                                                                <p class="mb-0 infringement_notice_offence_date">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Court Date</p>
+                                                                <p class="infringement_infringer_court_date">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0 pb-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Traffic Officer</p>
+                                                                <p class="mb-0 infringement_notice_officer_name">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Offence Location</p>
+                                                                <p class="mb-0 infringement_notice_offence_location">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Vehicle Details</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-1 text-muted">Registration</p>
+                                                <h6 class="mb-4 infringement_notice_registration">.</h6>
+                                                <p class="mb-1 text-muted">Make</p>
+                                                <h6 class="mb-4 infringement_notice_vehicle_make">.</h6>
+                                                <p class="mb-1 text-muted">Model</p>
+                                                <h6 class="mb-4 infringement_notice_vehicle_model">.</h6>
+                                                <p class="mb-1 text-muted">Colour</p>
+                                                <h6 class="mb-4 infringement_notice_vehicle_colour">.</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="tab-pane" id="profile-21" role="tabpanel" aria-labelledby="profile-tab-21">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="card">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h5>Personal Details</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-0 pt-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">ID Number</p>
+                                                                <p class="mb-0 infringement_infringer_id_number">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Title</p>
+                                                                <p class="mb-0 infringement_infringer_title">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">First Name</p>
+                                                                <p class="mb-0 infringement_infringer_name">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Last Name</p>
+                                                                <p class="mb-0 infringement_infringer_surname">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Cellphone Number</p>
+                                                                <p class="mb-0 infringement_infringer_cellphone">.</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="mb-1 text-muted">Email Address</p>
+                                                                <p class="mb-0 infringement_infringer_email">.</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Physical Address</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-1 text-muted">Street</p>
+                                                <h6 class="mb-4 infringement_infringer_physical_address">.</h6>
+                                                <p class="mb-1 text-muted">Suburb</p>
+                                                <h6 class="mb-4 infringement_infringer_physical_suburb">.</h6>
+                                                <p class="mb-1 text-muted">City</p>
+                                                <h6 class="mb-4 infringement_infringer_physical_city">.</h6>
+                                                <p class="mb-1 text-muted">Postal Code</p>
+                                                <h6 class="mb-4 infringement_infringer_physical_code">.</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="profile-31" role="tabpanel" aria-labelledby="profile-tab-31">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="card">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h5>Description/Regulation</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-0 pt-0">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="mb-1 text-muted">Short Description</p>
+                                                                <p class="mb-0 charge_code_short_description">.</p>
+                                                            </div>
+
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="mb-1 text-muted">Description</p>
+                                                                <p class="mb-0 charge_code_description">.</p>
+                                                            </div>
+
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-group-item px-0">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p class="mb-1 text-muted">Regulation</p>
+                                                                <p class="mb-0 charge_code_regulation">.</p>
+                                                            </div>
+
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Charge</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-1 text-muted">Fine Amount</p>
+                                                <h6 class="mb-4 text-danger charge_code_fine_amount">.</h6>
+                                                <p class="mb-1 text-muted">Charge Code</p>
+                                                <h6 class="mb-4 charge_code">.</h6>
+                                                <p class="mb-1 text-muted">Type</p>
+                                                <h6 class="mb-4 charge_code_vehicle_type">.</h6>
+                                                <p class="mb-1 text-muted">Category</p>
+                                                <h6 class="mb-4 charge_code_type">.</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="profile-41" role="tabpanel" aria-labelledby="profile-tab-41">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12">
+                                        <div class="card latest-update-card">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h5>Infringement History</h5>
+                                                <a href="#" id="btnExportHistory" class="btn btn-link-primary">Export</a>
+                                            </div>
+                                            <div class="card-body " id="divExportHistory">
+                                                <div class="latest-update-box">
+                                                    <div class="row p-t-20 p-b-30">
+                                                        <div class="col-auto text-end update-meta">
+                                                            <p class="text-muted m-b-0 d-inline-flex infringement_notice_offence_date">.</p>
+                                                            <i class="feather icon-alert-octagon bg-danger update-icon"></i>
+                                                        </div>
+                                                        <div class="col">
+                                                            <div class="d-flex align-items-center mb-2 justify-content-between">
+                                                                <h6>Infringement Issued</h6>
+                                                                <div class="">
+                                                                    <span class="mb-1 f-12 text-muted">Traffic Officer: </span>
+                                                                    <span class="mb-0 text-capitalize infringement_notice_officer_name">.</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="col-md-12">
+                                                                    <p class="text-muted text-capitalize m-b-0">
+                                                                        <b class="infringement_infringer_name">.</b> <b class="infringement_infringer_surname">.</b>:
+                                                                        <span class="charge_code_description">.</span>
+                                                                    </p>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="divHistory">
+                                                        <div class="row p-t-20 p-b-30">
+                                                            <div class="col-auto text-end update-meta">
+                                                                <p class="text-muted m-b-0 d-inline-flex infringement_notice_offence_date">.</p>
+                                                                <i class="feather icon-alert-octagon bg-danger update-icon"></i>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="d-flex align-items-center mb-2 justify-content-between">
+                                                                    <h6>Infringement Issued</h6>
+                                                                    <div class="">
+                                                                        <span class="mb-1 f-12 text-muted">Traffic Officer: </span>
+                                                                        <span class="mb-0 text-capitalize infringement_notice_officer_name">.</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <li class="list-group-item px-0 pt-0">
+                                                                            <div class="row">
+                                                                                <div class="col-md">
+                                                                                    <p class="mb-1 f-12 text-muted">Full Name</p>
+                                                                                    <p>Anshan Handgun</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-link-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade modal-animate" id="ReduceModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reduce Infringment</h5>
+                <button type="button" class="btn-close cancelManage" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="m-2">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <input id="txtCurrentFine" disabled="disabled" type="text" class="form-control is-valid">
+                                    <label for="txtCurrentFine">Current Fine (R)</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <input id="txtNewFine" maxlength="4" type="number" placeholder="" class="form-control requiredReduce">
+                                    <label for="txtNewFine">New Fine (R)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <select class="form-control requiredReduce" placeholder="" id="txtReduceReason">
+                                        <option disabled="disabled" selected value="">Select</option>
+                                        <option value="No Longer the Owner">No Longer the Owner</option>
+                                        <option value="Not the Driver">Not the Driver</option>
+                                        <option value="Medical Emergency">Medical Emergency</option>
+                                        <option value="Incorrect Details">Incorrect Details</option>
+                                        <option value="Unemployment">Unemployment</option>
+                                        <option value="Rehabilitation Program">Rehabilitation Program</option>
+                                        <option value="Timely Payment">Timely Payment</option>
+                                        <option value="Time Without Further Infringements">Time Without Further Infringements</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <label for="txtReduceReason">Reduction Reason</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3 divReduceDescription" style="display:none">
+                                <div class="form-floating">
+                                    <textarea class="form-control requiredReduce" id="txtReduceDescription" style="height: 90px" spellcheck="true"></textarea>
+                                    <label for="txtReduceDescription">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-link-danger cancelManage" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="btnReduce" class="btn btn-primary shadow-2">Reduce</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade modal-animate" id="WithdrawModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Withdraw Infringment</h5>
+                <button type="button" class="btn-close cancelManage" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="m-2">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center row">
+                            <div class="col-md-12 mb-3">
+                                <div class="form-floating">
+                                    <select class="form-control requiredWithdraw" placeholder="" id="txtWithdrawReason">
+                                        <option disabled="disabled" selected value="">Select</option>
+                                        <option value="No Longer the Owner">No Longer the Owner</option>
+                                        <option value="Not the Driver">Not the Driver</option>
+                                        <option value="Medical Emergency">Medical Emergency</option>
+                                        <option value="Incorrect Details">Incorrect Details</option>
+                                        <option value="Unemployment">Unemployment</option>
+                                        <option value="Rehabilitation Program">Rehabilitation Program</option>
+                                        <option value="Timely Payment">Timely Payment</option>
+                                        <option value="Time Without Further Infringements">Time Without Further Infringements</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <label for="txtWithdrawReason">Reduction Reason</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3 divWithdrawDescription" style="display:none">
+                                <div class="form-floating">
+                                    <textarea class="form-control requiredWithdraw" id="txtWithdrawDescription" style="height: 90px" spellcheck="true"></textarea>
+                                    <label for="txtWithdrawDescription">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-link-danger cancelManage" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="btnWithdraw" class="btn btn-primary shadow-2">Withdraw</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade modal-animate" id="PaymentModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pay Infringment(s)</h5>
+                <button type="button" class="btn-close cancelManage" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="m-2">
+                    <div class="col-12">
+                        <div class=" row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <select class="form-control requiredPayment" placeholder="" id="txtPaymentType">
+                                        <option disabled="disabled" selected value="">Select</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Card">Card</option>
+                                        <option value="Transfer">Transfer</option>
+                                    </select>
+                                    <label for="txtPaymentType">Payment Type</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input id="txtPaymentDate" maxlength="10" type="text" placeholder="" class="form-control requiredPayment myDatepicker">
+                                    <label for="txtPaymentDate">Payment Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="dt-responsive">
+                                    <table id="" class="table table-xs nowrap table-hover">
+                                        <thead>
+                                        <tr class="border-bottom">
+                                            <th></th>
+                                            <th>#</th>
+                                            <th>References</th>
+                                            <th>Registration</th>
+                                            <th>Fine Amount</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="mb-2" id="listPayment"></tbody>
+                                        <tfoot>
+                                        <tr><th></th><th></th><th></th>
+                                            <th class="text-muted pt-4">Total</th>
+                                            <th class="border-bottom pt-4"><b>R<span id="txtTotal">0</span></b></th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-link-danger cancelManage" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="btnPayment" class="btn btn-primary shadow-2">Pay</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

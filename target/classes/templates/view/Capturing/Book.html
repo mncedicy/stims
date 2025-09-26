@@ -1,0 +1,477 @@
+<script src="/Scripts/Capturing/book.js"></script>
+
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-end">
+                <h5 class="mb-0"><b>Book Capturing</b></h5>
+                <button type="button" id="btnBatch" class="btn btn-outline-primary btn-sm d-inline-flex pull-right">New Batch</button>
+            </div>
+
+        </div>
+        <div class="card-body">
+
+
+
+
+
+            <div class="dt-responsive">
+                <table id="tblBatches" class="table table-hover table-xs nowrap">
+                    <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Batch Type</th>
+                        <th>First Notice</th>
+                        <th>Last Notice</th>
+                        <th>Captured By</th>
+                        <th>Date</th>
+                        <th>Books</th>
+                        <th>Pages/Book</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="listBatches"></tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade modal-animate" id="addBatchModal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Batch</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Books Type:</label>
+                                <div class="input-group date">
+
+                                    <select class="form-control requiredBatch cleanField" id="cboBookType">
+                                        <option data-notice="" disabled="disabled" value="">-- Choose Book Type --</option>
+                                        <option data-notice="999999" value="10">341 Hand Written</option>
+                                        <option data-notice="999999" selected value="50">Section 56</option>
+                                        <option data-notice="9999" value="51">Section 56 By-law</option>
+                                    </select>
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="text-align:center">First Notice Number:</label>
+                                <div class="input-group date">
+
+                                    <input id="txtFirstNotice" type="text" class="form-control requiredBatch">
+
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="text-align:center">Number of Books:</label>
+                                <div class="input-group date">
+
+                                    <input id="txtBookCount" type="number" class="form-control requiredBatch" placeholder="Number of Books...">
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="text-align:center">Pages per Book:</label>
+                                <div class="input-group date">
+
+                                    <input id="txtPages" type="number" class="form-control requiredBatch" placeholder="Pages per Book...">
+                                </div>
+                                <!-- /.input group -->
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSubmitBatch" class="btn btn-primary shadow-2">Save Batch</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+
+
+
+<div class="modal fade " id="viewBatchModal" tabindex="-1"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Books Batch</h5>
+                <div class="text-center col-10">
+                    <div class="btn-group text-center" role="group">
+                        <input type="radio" class="btn-check" value="new" id="btnrdo1" checked name="btn_radio1">
+                        <label class="btn btn-outline-primary" for="btnrdo1">
+                            New Books
+                            <span id="bgNewBooks" class="badge bg-light text-dark rounded-pill">0</span>
+                        </label>
+                        <input type="radio" class="btn-check" value="issued" id="btnrdo2" name="btn_radio1">
+                        <label class="btn btn-outline-primary" for="btnrdo2">
+                            Issued to Officers
+                            <span id="bgIssued" class="badge bg-light text-dark rounded-pill">0</span>
+                        </label>
+                        <input type="radio" class="btn-check" value="handedin" id="btnrdo3" name="btn_radio1">
+                        <label class="btn btn-outline-primary" for="btnrdo3">
+                            Handed-in
+                            <span id="bgHandedin" class="badge bg-light text-dark rounded-pill">0</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div class="col-sm-12">
+                    <div class="dt-responsive">
+                        <table id="dom-jqry" class="table table-hover table-xs nowrap">
+                            <thead>
+
+                            <tr>
+                                <th>#</th>
+                                <th>Book Type</th>
+                                <th>First Notice</th>
+                                <th>Last Notice</th>
+                                <th>Pages</th>
+                                <th>Status</th>
+                                <th>Issued To</th>
+                                <th>Issue Date</th>
+                                <th>Handin Date</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listBooks"></tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+
+
+
+<div class="modal fade modal-animate" id="assignBook" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+
+                    <div class="row mt-3">
+
+
+                        <div class="col-md-4 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookType"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookPages"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Pages</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtFirstPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtLastPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Last Notice</p>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="m-3 mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center row">
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label style="text-align:center">Assign To <i class="text-muted text-sm mb-0">Traffic Officer</i></label>
+                                    <div class="input-group date">
+                                        <select id="cboOfficer" class="form-control requiredissue fstdropdown-select all" style="width: 100%; min-width: 100px" tabindex="-1" aria-hidden="true"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label style="text-align:center">Issue Date</label>
+                                    <div class="input-group date">
+
+                                        <input id="txtIssueDate" type="text" class="form-control requiredissue myDatepicker" placeholder="Issue Date...">
+
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSubmitIssue" class="btn btn-primary shadow-2">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+
+
+
+
+<div class="modal fade modal-animate" id="returnBook" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Return Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+
+                    <div class="row mt-3">
+
+
+                        <div class="col-md-4 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookType"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtFirstPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtLastPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Last Notice</p>
+                        </div>
+
+
+                        <div class="col-md-5 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtIssuedTo"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Issued To</p>
+                        </div>
+                        <div class="col-md-2 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookPages"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Pages</p>
+                        </div>
+
+                        <div class="col-md-5 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtIssueDate"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Issue Date</p>
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="m-3 mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center row">
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label style="text-align:center">Return Date</label>
+                                    <div class="input-group date">
+
+                                        <input id="txtReturnDate" type="text" class="form-control requiredhandin myDatepicker" placeholder="Return Date...">
+
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnSubmitHandin" class="btn btn-primary shadow-2">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+
+
+
+
+<div class="modal fade modal-animate" id="viewBook" data-bs-backdrop="static" data-bs-keyboard="false"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-md-12">
+
+                    <div class="row mt-3">
+
+
+                        <div class="col-md-4 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookType"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtBookPages"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Pages</p>
+                        </div>
+
+                        <div class="col-md-3 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtFirstPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Firtst Notice</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtLastPage"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Last Notice</p>
+                        </div>
+
+
+
+
+                        <div class="col-md-3 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtIssueDate"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Issue Date</p>
+                        </div>
+                        <div class="col-md-6 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtIssuedTo"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Issued To</p>
+                        </div>
+                        <div class="col-md-3 text-center mt-4">
+                            <a href="#!">
+                                <h6 class="m-b-5 txtHandinDate"></h6>
+                            </a>
+                            <p class="text-muted text-sm mb-0">Handin Date</p>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="m-3 mt-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-center row">
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
