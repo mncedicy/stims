@@ -2,13 +2,14 @@ package com.mncedicy.stims.api.Controller;
 
 import com.google.gson.Gson;
 import com.mncedicy.stims.api.Classes.*;
-import com.mncedicy.stims.api.Classes.IKhokha.PayRequest;
-import com.mncedicy.stims.api.Classes.IKhokha.PayResponse;
+import com.mncedicy.stims.api.Classes.Yoco.PayRequest;
+import com.mncedicy.stims.api.Classes.Yoco.PayResponse;
 import com.mncedicy.stims.api.Model.*;
 import com.mncedicy.stims.api.Repo.*;
 import com.mncedicy.stims.api.Services.EmailServiceImpl;
 import com.mncedicy.stims.api.Services.IKhokhaPayService;
 import com.mncedicy.stims.api.Services.TwilioService;
+import com.mncedicy.stims.api.Services.YocoPayService;
 import jakarta.mail.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +61,21 @@ public class ConfigurationController {
     private IkhokhaPaymentRepo ikhokhaPaymentRepo;
 
     @Autowired
+    private YocoPayService yocoPayService;
+
+    @Autowired
     private TwilioService twilioService;
 
     @Autowired
     private IKhokhaPayService iKhokhaPayService;
+
+    @Autowired
+    ManagementController managementController;
+    @Autowired
+    ReportController reportController;
+
+    @Autowired
+    private HistoryRepo historyRepo;
 
     @GetMapping(value = "/welcome")
     public String getPage(){
@@ -94,7 +107,7 @@ public class ConfigurationController {
 
     @GetMapping(value = "/runAutomations")
     @ResponseBody
-    public Response runAutomations(){
+    public Response runAutomations(@RequestParam String infringement_notice_reference){
         Response response = new Response();
         response.setStatus("Error");
 
@@ -103,7 +116,7 @@ public class ConfigurationController {
         for(rule rule :rules){
             RuleNoticesData ruleNoticesData = new RuleNoticesData();
             if(rule.rule_when.equals("After Capture Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByCaptureDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByCaptureAndEnatisDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
             else if(rule.rule_when.equals("After Offence Date"))
                 ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByOffenceDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
             else if(rule.rule_when.equals("Before Court Date"))
@@ -114,6 +127,8 @@ public class ConfigurationController {
                 ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().plusDays(rule.rule_days_repeats)));
             else if(rule.rule_when.equals("After Payment Date"))
                 ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+            else if(rule.rule_type.equals("Infringement") || rule.rule_type.equals("Payment"))
+                return runReport(rule);
 
 
             if(ruleNoticesData.notices.size()>0)
@@ -124,12 +139,14 @@ public class ConfigurationController {
         for(RuleNoticesData data :ruleNoticesDataList){
 
             for(infringement_notice notice :data.notices){
-                if(!notice.infringement_notice_cellphone.isEmpty()){
-                    if(data.rule.rule_trigger.equals("Whatsapp"))
-                        sendWhatsAppMessage(notice.infringement_notice_cellphone,replaceVariables(notice,data.rule.rule_message));
-                    else if(data.rule.rule_trigger.equals("SMS"))
-                        sendSimpleSMS(notice.infringement_notice_cellphone,replaceVariables(notice,data.rule.rule_message));
+                if(infringement_notice_reference.isEmpty() || infringement_notice_reference.equals(notice.infringement_notice_reference)) {
 
+                    if (data.rule.rule_trigger.equals("Whatsapp") && !notice.infringement_notice_cellphone.isEmpty())
+                        sendWhatsAppMessage(notice.infringement_notice_cellphone, replaceVariables(notice, data.rule.rule_message));
+                    else if (data.rule.rule_trigger.equals("SMS") && !notice.infringement_notice_cellphone.isEmpty())
+                        sendSimpleSMS(notice.infringement_notice_cellphone, replaceVariables(notice, data.rule.rule_message));
+                    else if (data.rule.rule_trigger.equals("Status"))
+                        runStatus(data.rule.rule_type,notice.infringement_notice_client_id,notice.infringement_notice_reference);
                 }
             }
 
@@ -144,6 +161,133 @@ public class ConfigurationController {
 
 
 
+    @GetMapping(value = "/runReport")
+    public Response runReport(@RequestParam rule rule){
+        Response response = new Response();
+        response.setStatus("Error");
+        System.out.println(rule.rule_type);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        EmailServiceImpl emailService = new EmailServiceImpl();
+        String emailBody =
+                "Hi\n\nPlease find the "+rule.rule_type+" "+rule.rule_when+
+                        " report for "+LocalDate.now().minusDays(rule.rule_range_days).format(formatter)+
+                        " to "+LocalDate.now().format(formatter)+" attached to this email.\n\nBest regards,\n\nStims automated email reports";
+        try {
+            long daysBetween = ChronoUnit.DAYS.between(rule.rule_start_date, LocalDate.now());
+            if(rule.rule_when.equals("Daily") || (rule.rule_when.equals("Weekly") && daysBetween%7==0)
+            || (rule.rule_when.equals("Monthly") && rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth()
+            || (rule.rule_when.equals("Yearly") && (rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth()
+                    && rule.rule_start_date.getMonthValue()==LocalDate.now().getMonthValue())))){
+
+                 if(rule.rule_type.equals("Infringement")){
+                     System.out.println(LocalDate.now().minusDays(rule.rule_range_days));
+                     List<infringement_notice> notices = noticeRepo.findNoticeByDateRange(rule.rule_client_id,
+                             LocalDate.now().minusDays(rule.rule_range_days),LocalDate.now(), "");
+                     System.out.println(notices);
+                     if(!notices.isEmpty()) {
+                         String location="";
+                         if(rule.rule_doc_type.equals("PDF"))
+                             location = reportController.printNoticeReport(notices, rule.rule_grouping).getHeaders().getFirst("location");
+                         else
+                             location = reportController.printNoticeExcel(notices, rule.rule_grouping).getHeaders().getFirst("location");
+
+                         System.out.println(location);
+                         emailService.sendMessageWithInputStreamAttachment(
+                                 new String[]{"mkhonzenimkhonzeni@gmail.com"},
+                                 rule.rule_type + " report", emailBody,
+                                 new String[]{location});
+
+                     }
+                     response.setData(notices);
+                 }
+                 else if (rule.rule_type.equals("Payment")){
+
+                 }
+
+            }
+
+
+
+            response.setMessage("Successfully Sent");
+            response.setStatus("Success");
+        }catch (Exception e){
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+
+
+
+
+
+    @GetMapping(value = "/runStatus")
+    public Response runStatus(@RequestParam String rule_type,@RequestParam int client_id,@RequestParam String notice_reference){
+        Response response = new Response();
+        response.setStatus("Error");
+
+        try {
+            if(!rule_type.equals("Warrant") && !rule_type.equals("Expired")) {
+                response.setMessage("Invalid status");
+                return response;
+            }
+
+            List<infringement_notice> notices = noticeRepo.findByClientReference(client_id,notice_reference);
+            if(notices.isEmpty()){
+                response.setMessage("Notice not found");
+                return response;
+            }
+            infringement_notice notice = notices.get(0);
+
+            Client client = clientRepo.findById(client_id).get();
+
+            if(rule_type.equals("Warrant")){
+                notice.infringement_notice_warrant_status = "Warrant";
+                notice.infringement_notice_letter_status = "Warrant Letter";
+                notice.infringement_notice_final_amount += client.client_warrant_amount;
+                notice.infringement_notice_warrant_amount = client.client_warrant_amount;
+                notice.infringement_notice_holder_value = "Warrant Issued";
+                notice.infringement_notice_holder_value1 = "Warrant of Arrest";
+            }
+            else if(rule_type.equals("Expired")){
+                notice.infringement_notice_access_status = "Closed";
+                notice.infringement_notice_holder_value = "Notice Expired";
+                notice.infringement_notice_holder_value1 = "Notice infringement closed";
+            }
+
+            notice.infringement_notice_status = rule_type;
+            notice.infringement_notice_letter_status_date = LocalDate.now();
+            notice.infringement_notice_last_update = LocalDateTime.now();
+            notice = noticeRepo.save(notice);
+
+            history history = new history();
+            history.history_reference_id = notice.infringement_notice_id;
+            history.history_reference_type = "Infringement";
+            history.history_value = notice.infringement_notice_holder_value;
+            history.history_value1 = notice.infringement_notice_holder_value1;
+            if(rule_type.equals("Warrant")) {
+                history.history_value2 = notice.infringement_notice_warrant_amount + "";
+                history.history_value3 = notice.infringement_notice_final_amount + "";
+            }
+            history.history_value8 = notice.infringement_notice_reference;
+            history.history_client_id = notice.infringement_notice_client_id;
+            history.history_status = "New";
+            history.history_action_by_name = "System";
+            history.history_action = notice.infringement_notice_holder_value;
+            historyRepo.save(history);
+
+            response.setData(notice);
+            response.setMessage("Successfully Updated");
+            response.setStatus("Success");
+        }catch (Exception e){
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+
+
+
     @GetMapping("/sendWhatsAppMessage")
     public String sendWhatsAppMessage(@RequestParam String phoneNumber, @RequestParam String message) {
         return twilioService.sendWhatsAppMessage(phoneNumber, message);
@@ -155,72 +299,96 @@ public class ConfigurationController {
         return emailService.sendSimpleSMS(phoneNumber, message);
     }
 
-
-    @PostMapping(value = "/payment1")
-    public Response payment1(@RequestBody PayRequest data) throws URISyntaxException {
-        Response response = new Response();
-        System.out.println(data);
-        System.out.println(data.externalEntityID);
-        response.setData(data);
-        String requestUrl = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();
-        URI uri = new URI(requestUrl);
-        response.setMessage(uri.resolve("/").toString());
-        response.setStatus("Success");
-        return response;
-
-    }
-
-
-    @PostMapping(value = "/payment")
-    public Response payment(@RequestBody PayRequest payRequest)  {
-        Response response = iKhokhaPayService.payment(payRequest);
-        if(response.getStatus().equals("Success")){
-            PayResponse payResponse = (PayResponse) response.getData();
-            ikhokha_payment payment= new ikhokha_payment();
-            payment.ikhokha_payment_amount = payRequest.amount;
-            payment.ikhokha_payment_fine = ((double) payRequest.amount)/100;
-            payment.ikhokha_payment_client_id = Integer.parseInt(payRequest.externalEntityID);
-            payment.ikhokha_payment_description = payRequest.externalTransactionID;
-            payment.ikhokha_payment_entity_id = payRequest.entityID;
-            payment.ikhokha_payment_external_entity_id = payRequest.externalEntityID;
-            payment.ikhokha_payment_external_transaction_id = payRequest.externalTransactionID;
-            payment.ikhokha_payment_notice_reference = payRequest.externalTransactionID;
-            payment.ikhokha_payment_status = "UNPAID";
-            payment.ikhokha_payment_timestamp = LocalDateTime.now();
-            payment.ikhokha_payment_paylink_id = payResponse.paylinkID;
-            payment.ikhokha_payment_paylink_url = payResponse.paylinkUrl;
-            payment.ikhokha_payment_response_code = payResponse.responseCode;
-            payment.ikhokha_payment_message = payResponse.message;
-            List<ikhokha_payment> payments = ikhokhaPaymentRepo.findByPayLinkId(payResponse.paylinkID);
-            if(payments.isEmpty())
-                payment = ikhokhaPaymentRepo.save(payment);
-            response.setData(payment);
+    @PostMapping(value = "/yoco/checkout")
+    public Response yocoCheckout(@RequestBody List<String> uuids)  {
+        List<infringement_notice> notices = new ArrayList<>();
+        for (String uuid:uuids){
+            List<infringement_notice> uuid_notices = noticeRepo.findByUUID(uuid);
+            if(uuid_notices.size()>0)
+                if(uuid_notices.get(0).infringement_notice_access_status.equals("Open"))
+                    notices.add(uuid_notices.get(0));
         }
 
-        return response;
+        if(notices.size()==0)
+        {
+            Response response = new Response();
+            response.setStatus("Error");
+            System.out.println("Notice not found or already paid");
+            response.setMessage("Notice not found or already paid");
+            return response;
+        }
+        return yocoPayService.createCheckout(notices);
     }
 
-    @GetMapping(value = "/getPaymentStatus")
-    public Response getPaymentStatus(@RequestParam String paylinkId)  {
-
-        return iKhokhaPayService.getPaymentStatus(paylinkId);
-
-    }
-
-    @GetMapping(value = "/getPaymentHistory")
-    public Response getPaymentHistory(@RequestParam String startDate,@RequestParam String endDate)  {
-
-        return iKhokhaPayService.getPaymentHistory(startDate,endDate);
-
-    }
 
     @PostMapping("/payment/webhook/callback")
-    public Object handleWebhook(@RequestBody PayResponse payload) {
-        // Process the incoming webhook payload here
+    public Response handleWebhook(@RequestBody String payload) {
         System.out.println("Received webhook payload: " + payload);
-        return payload;
+        PayResponse payResponse = new Gson().fromJson(payload,PayResponse.class);
+        System.out.println("Received webhook payload: " + payResponse.payload.metadata.noticeId+" "+payResponse.payload.metadata);
+        infringement_notice notice = noticeRepo.findById(payResponse.payload.metadata.noticeId).get();
+        notice.infringement_notice_status_updated_by_name = notice.infringement_notice_name+"";
+        notice.infringement_notice_status_updated_by = 0;
+        notice.infringement_notice_holder_value = "Transfer";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        notice.infringement_notice_holder_value1 = LocalDate.now().format(formatter);
+        notice.infringement_notice_holder_value2 = notice.infringement_notice_client_name;
+        notice.infringement_notice_holder_value3 = notice.infringement_notice_name;
+        notice.infringement_notice_holder_value4 = payResponse.payload.paymentMethodDetails.type;
+        notice.infringement_notice_holder_value_double = notice.infringement_notice_final_amount;
+        System.out.println("Received webhook payload: " + notice);
+
+        return  managementController.payNotice(List.of(notice));
     }
 
+
+
+
+//    @PostMapping(value = "/payment")
+//    public Response payment(@RequestBody PayRequest payRequest)  {
+//        Response response = iKhokhaPayService.payment(payRequest);
+//        if(response.getStatus().equals("Success")){
+//            PayResponse payResponse = (PayResponse) response.getData();
+//            ikhokha_payment payment= new ikhokha_payment();
+//            payment.ikhokha_payment_amount = payRequest.amount;
+//            payment.ikhokha_payment_fine = ((double) payRequest.amount)/100;
+//            payment.ikhokha_payment_client_id = Integer.parseInt(payRequest.externalEntityID);
+//            payment.ikhokha_payment_description = payRequest.externalTransactionID;
+//            payment.ikhokha_payment_entity_id = payRequest.entityID;
+//            payment.ikhokha_payment_external_entity_id = payRequest.externalEntityID;
+//            payment.ikhokha_payment_external_transaction_id = payRequest.externalTransactionID;
+//            payment.ikhokha_payment_notice_reference = payRequest.externalTransactionID;
+//            payment.ikhokha_payment_status = "UNPAID";
+//            payment.ikhokha_payment_timestamp = LocalDateTime.now();
+//            payment.ikhokha_payment_paylink_id = payResponse.paylinkID;
+//            payment.ikhokha_payment_paylink_url = payResponse.paylinkUrl;
+//            payment.ikhokha_payment_response_code = payResponse.responseCode;
+//            payment.ikhokha_payment_message = payResponse.message;
+//            List<ikhokha_payment> payments = ikhokhaPaymentRepo.findByPayLinkId(payResponse.paylinkID);
+//            if(payments.isEmpty())
+//                payment = ikhokhaPaymentRepo.save(payment);
+//            response.setData(payment);
+//        }
+//
+//        return response;
+//    }
+//
+//
+//    @GetMapping(value = "/getPaymentStatus")
+//    public Response getPaymentStatus(@RequestParam String paylinkId)  {
+//
+//        return iKhokhaPayService.getPaymentStatus(paylinkId);
+//
+//    }
+//
+//    @GetMapping(value = "/getPaymentHistory")
+//    public Response getPaymentHistory(@RequestParam String startDate,@RequestParam String endDate)  {
+//
+//        return iKhokhaPayService.getPaymentHistory(startDate,endDate);
+//
+//    }
+//
+//
 
 
 
@@ -258,8 +426,19 @@ public class ConfigurationController {
 
 
     public String replaceVariables(infringement_notice notice,String message){
+        String requestedUrl = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();
+        String requestedUrlBase="";
+        try {
+            requestedUrlBase = new URI(requestedUrl).resolve("/").toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        message = message.replace("{{Fine}}",notice.infringement_notice_final_amount+"");
+        if(notice.infringement_notice_final_amount<1) {
+            message = message.replace("{{PaymentLink}}", "");
+            message = message.replace("{{Fine}}","NAG");
+        }
+        message = message.replace("{{Fine}}","R"+((int)notice.infringement_notice_final_amount));
         message = message.replace("{{OffenceDate}}",notice.infringement_notice_offence_date.format(formatter));
         message = message.replace("{{CourtDate}}",notice.infringement_notice_court_date.format(formatter));
         message = message.replace("{{CourtName}}",notice.infringement_notice_court_name+"");
@@ -272,6 +451,7 @@ public class ConfigurationController {
         message = message.replace("{{Charge}}",notice.infringement_notice_charge_description+"");
         message = message.replace("{{OffenderName}}",notice.infringement_notice_name+"");
         message = message.replace("{{ClientName}}",notice.infringement_notice_client_name+"");
+        message = message.replace("{{PaymentLink}}",requestedUrlBase+"payment/"+notice.infringement_notice_uuid+"");
 
         return  message;
     }

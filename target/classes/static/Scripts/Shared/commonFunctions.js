@@ -631,7 +631,7 @@ function getStatus(status) {
     var statuss = { status: capitalizeFirstLetter(status), badge: '', span: capitalizeFirstLetter(status) };
     statuss.badge = status == 'Printed' || status == 'Notice' || status == 'New' || status == 'Ready' ? 'primary'
         : status == 'Captured' || status == 'Reduced' || status == 'issued' || status == 'Saved' || status == 'Exported'  ? 'warning'
-            : status == 'Paid' || status == 'Withdrawn' || status == 'Submitted' || status == 'handedin' || status == 'Active'? 'success'
+            : status == 'Paid' || status == 'Withdrawn' || status == 'Submitted' || status == 'handedin' || status == 'Active' || status == 'Expired'? 'success'
                 : status == 'Warrant' || status == 'Deleted' || status == 'Not Found' ? 'danger'
             : 'default';
 

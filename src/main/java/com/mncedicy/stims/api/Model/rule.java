@@ -38,4 +38,6 @@ public class rule {
     public int rule_triggered_count;
     public String rule_range;
     public LocalDate rule_start_date;
+    public String rule_week_days;
+    public int rule_range_days;
 }

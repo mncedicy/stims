@@ -290,6 +290,7 @@
                 data.push(['Notice Reference', history[i].history_value8]);
                 data.push(['Contempt Of Court', 'R' + parseFloat(history[i].history_value2)]);
                 data.push(['New Amount', fineO]);
+                data.push(['Reason', history[i].history_value1]);
             }
             else if (history[i].history_action == 'Notice Postponed') {
                 data.push(['bg-info', 'trending-down']);
@@ -311,6 +312,12 @@
                 data.push(['Payment Type', history[i].history_value]);
                 data.push(['Payment Date', getDatee(history[i].history_value1)]);
 
+            }
+            else if (history[i].history_action == 'Notice Expired') {
+                data.push(['bg-success', 'trending-down']);
+                data.push(['Notice Reference', history[i].history_value8]);
+                data.push(['Withdrawn Reason', history[i].history_value1]);
+                data.push(['', '']);
             }
 
             if (data.length > 0) {

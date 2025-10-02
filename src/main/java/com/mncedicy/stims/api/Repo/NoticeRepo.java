@@ -17,6 +17,9 @@ public interface NoticeRepo extends JpaRepository<infringement_notice,Long> {
     @Query("SELECT a FROM infringement_notice a WHERE a.infringement_notice_client_id = :client_id")
     List<infringement_notice> findByClientId(@Param("client_id") int client_id);
 
+    @Query("SELECT a FROM infringement_notice a WHERE a.infringement_notice_uuid = :uuid")
+    List<infringement_notice> findByUUID(@Param("uuid") String uuid);
+
     @Query("SELECT a FROM infringement_notice a WHERE a.infringement_notice_captured_by = :captured_by " +
             "and (a.infringement_notice_status='Notice' or a.infringement_notice_status='Saved') " +
             "order by a.infringement_notice_id desc, a.infringement_notice_status desc")
@@ -150,6 +153,18 @@ public interface NoticeRepo extends JpaRepository<infringement_notice,Long> {
                                                     @Param("date_to") LocalDate date_to,
                                                     @Param("access_status") String access_status);
 
+
+    @Query("SELECT a FROM infringement_notice a WHERE " +
+            "a.infringement_notice_offence_date between :date_from and :date_to " +
+            "and a.infringement_notice_client_id = :client_id " +
+            "and a.infringement_notice_status!='Saved' " +
+            "and a.infringement_notice_access_status LIKE %:access_status% " +
+            "order by a.infringement_notice_offence_date asc")
+    List<infringement_notice> findNoticeByDateRange(@Param("client_id") int client_id,
+                                                        @Param("date_from") LocalDate date_from,
+                                                        @Param("date_to") LocalDate date_to,
+                                                        @Param("access_status") String access_status);
+
     @Query("SELECT count(a) FROM infringement_notice a where " +
             "a.infringement_notice_officer_id=:officer_id and a.infringement_notice_status != 'Saved'")
     Integer CountAllByfficerId(@Param("officer_id") long officer_id);
@@ -177,6 +192,15 @@ public interface NoticeRepo extends JpaRepository<infringement_notice,Long> {
             "and a.infringement_notice_status!='Saved'")
     List<infringement_notice> findByCaptureDate(@Param("client_id") int client_id,
                                                     @Param("capture_date") LocalDate capture_date);
+
+    @Query("SELECT a FROM infringement_notice a WHERE " +
+            "(a.infringement_notice_capture_date = :capture_date or " +
+            "a.infringement_notice_enatis_capture_date = :capture_date) " +
+            "and a.infringement_notice_client_id = :client_id " +
+            "and a.infringement_notice_access_status='Open' " +
+            "and a.infringement_notice_status!='Saved'")
+    List<infringement_notice> findByCaptureAndEnatisDate(@Param("client_id") int client_id,
+                                                @Param("capture_date") LocalDate capture_date);
 
     @Query("SELECT a FROM infringement_notice a WHERE " +
             "a.infringement_notice_offence_date = :offence_date " +

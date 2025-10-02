@@ -25,7 +25,7 @@ public class ApiApplication {
 
 	@Scheduled(cron = "0 0 06 * * *")
 	public void runEveyDayAt6() {
-		configurationController.runAutomations();
+		configurationController.runAutomations("");
 	}
 
 }

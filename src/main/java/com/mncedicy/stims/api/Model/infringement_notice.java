@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 public class infringement_notice {
@@ -84,6 +85,7 @@ public class infringement_notice {
     public double infringement_notice_holder_value_double;
     public String infringement_notice_holder_value2;
     public String infringement_notice_holder_value3;
+    public String infringement_notice_holder_value4;
     public String infringement_notice_saved_note;
     public long infringement_notice_saved_by;
     public String infringement_notice_saved_by_name;
@@ -101,10 +103,24 @@ public class infringement_notice {
     public LocalDateTime infringement_notice_enatis_verify_date;
     public LocalDate infringement_notice_capture_date;
     public LocalDateTime infringement_notice_capture_timestamp;
+    public LocalDate infringement_notice_enatis_capture_date;
+    public LocalDateTime infringement_notice_enatis_capture_timestamp;
     public String infringement_notice_email;
     public String infringement_notice_cellphone;
     public String infringement_notice_client_name;
+    public String infringement_notice_uuid;
 
+
+    @PrePersist
+    public void generateUserUuid() {
+        if (infringement_notice_uuid == null) {
+            infringement_notice_uuid = String.valueOf(UUID.randomUUID());
+        }
+    }
+
+    public double getInfringement_notice_final_amount() {
+        return infringement_notice_final_amount;
+    }
 }
 
 

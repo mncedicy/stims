@@ -2,6 +2,7 @@ package com.mncedicy.stims.api.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -150,6 +151,11 @@ public class IndexController {
         return "view/Payment/Results";
     }
 
+    @RequestMapping("/payment/{id}")
+    public String paymentCheckout(Model model){
+        model.addAttribute("type","checkout");
+        return "view/Payment/Results";
+    }
 
 
 }

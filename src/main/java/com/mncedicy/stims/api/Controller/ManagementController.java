@@ -66,10 +66,6 @@ public class ManagementController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private final PdfService pdfService;
-    public ManagementController(PdfService pdfService) {
-        this.pdfService = pdfService;
-    }
 
 
     @GetMapping(value = "/welcome")
@@ -315,7 +311,7 @@ public class ManagementController {
             historyRepo.save(history);
 
             response.setData(updateNotice);
-            response.setMessage("Successfully Withdrawn");
+            response.setMessage("Successfully Issued");
             response.setStatus("Success");
         }catch (Exception e){
             response.setMessage(e.getMessage());
@@ -354,7 +350,7 @@ public class ManagementController {
             historyRepo.save(history);
 
             response.setData(updateNotice);
-            response.setMessage("Successfully Withdrawn");
+            response.setMessage("Successfully Postponed");
             response.setStatus("Success");
         }catch (Exception e){
             response.setMessage(e.getMessage());
@@ -414,6 +410,7 @@ public class ManagementController {
             invoice.invoice_created_by_name = notices.get(0).infringement_notice_status_updated_by_name;
             invoice.invoice_payment_date = LocalDate.parse(notices.get(0).infringement_notice_holder_value1);
             invoice.invoice_payment_type = notices.get(0).infringement_notice_holder_value;
+            invoice.invoice_payment_subtype = notices.get(0).infringement_notice_holder_value4;
             invoice.invoice_records = notices.size();
             invoice = invoiceRepo.save(invoice);
 
@@ -472,6 +469,7 @@ public class ManagementController {
 
     @GetMapping(value = "/getInvoice")
     public ResponseEntity<byte[]> getInvoice(@RequestParam long invoice_number) {
+        PdfService pdfService = new PdfService();
         InvoiceData invoiceData = new InvoiceData();
         invoiceData.invoice = invoiceRepo.findById(invoice_number).get();
         invoiceData.invoice_items = invoiceItemRepo.findByInvoiceNumber(invoice_number);
@@ -675,6 +673,7 @@ public class ManagementController {
 
     @GetMapping(value = "/getPrintCourtRoll")
     public ResponseEntity<byte[]> getPrintCourtRoll(@RequestParam long court_roll_id,@RequestParam String type) {
+        PdfService pdfService = new PdfService();
         CourtRollData courtRollData = new CourtRollData();
         courtRollData.court_roll = courtRollRepo.findById(court_roll_id).get();
         courtRollData.court_roll_items = courtRollItemRepo.findByCourtRollId(court_roll_id);
@@ -731,6 +730,7 @@ public class ManagementController {
 
     @PostMapping(value = "/getletterPrint/{id}")
     public ResponseEntity<byte[]> getletterPrint(@PathVariable int id,@RequestParam String letter_status,@RequestBody List<InfringementData> infringementDataList) {
+        PdfService pdfService = new PdfService();
         Client client= clientRepo.findById(id).get();
         return pdfService.downloadLegalLetterResponseEntity(infringementDataList,letter_status, client);
     }
@@ -738,6 +738,7 @@ public class ManagementController {
 
     @PostMapping(value = "/getWarrant")
     public Response getWarrant(@RequestBody InfringementData infringementData) {
+        PdfService pdfService = new PdfService();
         Response response = new Response();
         response.setStatus("Success");
         Client client= clientRepo.findById(infringementData.notice.infringement_notice_client_id).get();
@@ -752,6 +753,7 @@ public class ManagementController {
     @GetMapping(value = "/printOutstanding")
     @ResponseBody
     public ResponseEntity<byte[]> printOutstanding(@RequestParam int client_id,@RequestParam String infringement_notice_id_number){
+        PdfService pdfService = new PdfService();
         List<infringement_notice> notices= noticeRepo.findByClientIdNumberOpen(client_id,infringement_notice_id_number);
         List<String> registrations = new ArrayList<>();
         List<List<infringement_notice>> noticeList = new ArrayList<>();

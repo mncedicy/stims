@@ -15,6 +15,7 @@ com\mncedicy\stims\api\Model\enatis_file.class
 com\mncedicy\stims\api\Repo\PrivilegeRepo.class
 com\mncedicy\stims\api\Services\EmailServiceImpl.class
 com\mncedicy\stims\api\Services\IKhokhaPayService.class
+com\mncedicy\stims\api\Services\YocoPayService.class
 com\mncedicy\stims\api\Repo\NotificationRepo.class
 com\mncedicy\stims\api\ApiApplication.class
 com\mncedicy\stims\api\Model\charge_code.class
@@ -32,6 +33,7 @@ com\mncedicy\stims\api\Model\enatis_model.class
 com\mncedicy\stims\api\Model\notification_item.class
 com\mncedicy\stims\api\Model\vehicle_model.class
 com\mncedicy\stims\api\Model\invoice.class
+com\mncedicy\stims\api\Classes\Yoco\PayRequest.class
 com\mncedicy\stims\api\Model\court_roll.class
 com\mncedicy\stims\api\Model\invoice_item.class
 com\mncedicy\stims\api\Repo\HistoryRepo.class
@@ -48,6 +50,7 @@ com\mncedicy\stims\api\Classes\CountData.class
 com\mncedicy\stims\api\Repo\UserRepo.class
 com\mncedicy\stims\api\Repo\RuleRepo.class
 com\mncedicy\stims\api\Classes\RuleData.class
+com\mncedicy\stims\api\Classes\Yoco\Card.class
 com\mncedicy\stims\api\Model\vehicle_type.class
 com\mncedicy\stims\api\Model\infringement_notice.class
 com\mncedicy\stims\api\Model\User.class
@@ -57,10 +60,12 @@ com\mncedicy\stims\api\Repo\enatis_usageRepo.class
 com\mncedicy\stims\api\Model\book.class
 com\mncedicy\stims\api\Classes\IKhokha\PayResponse.class
 com\mncedicy\stims\api\Model\notification.class
+com\mncedicy\stims\api\Classes\Yoco\PaymentMethodDetails.class
 com\mncedicy\stims\api\Repo\enatis_colourRepo.class
 com\mncedicy\stims\api\Controller\CapturingController.class
 com\mncedicy\stims\api\Model\court.class
 com\mncedicy\stims\api\Model\Role.class
+com\mncedicy\stims\api\Services\IKhokhaPayService$1.class
 com\mncedicy\stims\api\Repo\VehicleMakeRepo.class
 com\mncedicy\stims\api\Classes\BookBatchData.class
 com\mncedicy\stims\api\Classes\IKhokha\Urls.class
@@ -77,14 +82,19 @@ com\mncedicy\stims\api\Repo\CourtRepo.class
 com\mncedicy\stims\api\Model\book_item.class
 com\mncedicy\stims\api\Services\PdfService.class
 com\mncedicy\stims\api\Repo\BookRepo.class
+com\mncedicy\stims\api\Classes\Yoco\Metadata.class
+com\mncedicy\stims\api\Model\ikhokha_payment.class
 com\mncedicy\stims\api\Model\history.class
 com\mncedicy\stims\api\Classes\Response.class
 com\mncedicy\stims\api\Repo\VehicleModelRepo.class
 com\mncedicy\stims\api\Repo\CourtRollItemRepo.class
 com\mncedicy\stims\api\Model\enatis_type.class
+com\mncedicy\stims\api\Classes\Yoco\LineItem.class
+com\mncedicy\stims\api\Repo\IkhokhaPaymentRepo.class
 com\mncedicy\stims\api\Repo\NotificationItemRepo.class
 com\mncedicy\stims\api\Repo\InvoiceItemRepo.class
 com\mncedicy\stims\api\Repo\PersonRepo.class
+com\mncedicy\stims\api\Classes\Yoco\PayResponse.class
 com\mncedicy\stims\api\Controller\ReportController.class
 com\mncedicy\stims\api\Model\Client.class
 com\mncedicy\stims\api\Repo\InfringerRepo.class
@@ -98,5 +108,6 @@ com\mncedicy\stims\api\Model\Person.class
 com\mncedicy\stims\api\Repo\enatis_makeRepo.class
 com\mncedicy\stims\api\Services\PushNotificationService.class
 com\mncedicy\stims\api\Controller\ManagementController.class
+com\mncedicy\stims\api\Classes\Yoco\PricingDetails.class
 com\mncedicy\stims\api\Services\TwilioService.class
 com\mncedicy\stims\api\Repo\CourtRollRepo.class

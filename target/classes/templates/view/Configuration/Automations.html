@@ -23,7 +23,7 @@
                         <th>Trigger</th>
                         <th>Type</th>
                         <th>When</th>
-                        <th>Days</th>
+                        <th>Days/Doc</th>
                         <th>Status</th>
                         <th class="text-center clsAction">Action</th>
                     </tr>
@@ -69,8 +69,8 @@
                                         <option selected value="">Select</option>
                                         <option value="SMS">SMS</option>
                                         <option value="Whatsapp">Whatsapp</option>
-                                        <option value="Email">Email</option>
                                         <option value="Status">Status</option>
+                                        <option value="Email">Email</option>
                                     </select>
                                     <label for="cboTrigger">Trigger</label>
                                 </div>
@@ -91,17 +91,36 @@
                                             <option class="Trigger Email" value="Daily">Daily</option>
                                             <option class="Trigger Email" value="Weekly">Weekly</option>
                                             <option class="Trigger Email" value="Monthly">Monthly</option>
+                                            <option class="Trigger Email" value="Yearly">Yearly</option>
                                         </select>
                                         <label for="cboWhen">When</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+
+                            <div class="col-md-6 mb-3 Trigger SMS Status Whatsapp">
                                 <div class="form-floating">
-                                    <input id="txtDaysRepeat" placeholder="" type="number" class="form-control clsRule">
+                                    <input id="txtDaysRepeat" placeholder="" type="number" class="form-control clsRuleChange">
                                     <label for="txtDaysRepeat">Days</label>
                                 </div>
                             </div>
+
+                            <div class="col-md-6 mb-3 Trigger Email cboWhen Daily">
+                                <div class="form-floating">
+                                    <select class="form-control clsCleanTrigger clsRuleChange" placeholder="" id="cboWeekDays">
+                                        <option selected value="">Select</option>
+                                        <option value="Weekdays">Weekdays</option>
+                                        <option value="Weekends">Weekends</option>
+                                        <option value="Holidays">Holidays</option>
+                                        <option value="Weekdays Weekends">Weekdays and Weekends</option>
+                                        <option value="Weekdays Holidays">Weekdays and Holidays</option>
+                                        <option value="Weekends Holidays">Weekends and Holidays</option>
+                                        <option value="Weekdays Weekends Holidays">Weekdays, Weekends and Holidays</option>
+                                    </select>
+                                    <label for="cboWeekDays">Week Days</label>
+                                </div>
+                            </div>
+
 
                             <div class="col-md-6 mb-3">
                                 <div class="form-floating">
@@ -123,11 +142,14 @@
                             <div class="col-md-6 mb-3 Trigger Email">
                                 <div class="form-floating">
                                     <select class="form-control clsCleanTrigger clsRuleChange" placeholder="" id="cboRange">
-                                        <option selected value="">Select</option>
-                                        <option value="Day">1 Day</option>
-                                        <option value="Week">1 Week</option>
-                                        <option value="Month">1 Month</option>
-                                        <option value="Year">1 Year</option>
+                                        <option data-val="0" selected value="">Select</option>
+                                        <option data-val="1" value="1 Day">1 Day</option>
+                                        <option data-val="2" value="2 Days">2 Days</option>
+                                        <option data-val="7" value="1 Week">1 Week</option>
+                                        <option data-val="14" value="2 Weeks">2 Weeks</option>
+                                        <option data-val="30" value="1 Month">1 Month</option>
+                                        <option data-val="60" value="2 Months">2 Months</option>
+                                        <option data-val="365" value="1 Year">1 Year</option>
                                     </select>
                                     <label for="cboRange">Date Range</label>
                                 </div>
@@ -198,6 +220,7 @@
                                             <a class="dropdown-item" data-val="{{Charge}}">Charge</a>
                                             <a class="dropdown-item" data-val="{{OffenderName}}">Offender Name</a>
                                             <a class="dropdown-item" data-val="{{ClientName}}">Client Name</a>
+                                            <a class="dropdown-item" data-val="{{PaymentLink}}">Payment Link</a>
 
                                         </div>
                                     </div>

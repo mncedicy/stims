@@ -354,7 +354,6 @@
         notice.infringement_notice_charge_code = charge_code ? charge_code.charge_code : 0;
         notice.infringement_notice_fine_amount = charge_code ? charge_code.charge_code_fine_amount : '';
         notice.infringement_notice_charge_short_description = charge_code ? charge_code.charge_code_short_description : '';
-        notice.infringement_notice_charge_description = charge_code ? replaceHolders(charge_code.charge_code_description, notice) : '';
         notice.infringement_notice_final_amount = !charge_code || charge_code.charge_code_fine_amount == 'NAG' ? 0 : parseFloat(charge_code.charge_code_fine_amount);
 
         notice.infringement_notice_offence_date = $('#txtOffenceDate').val() ? $('#txtOffenceDate').val() + 'T00:00:00' : null;
@@ -372,6 +371,9 @@
 
         notice.infringement_notice_cellphone = $('#txtCellphoneNumber').val();
         notice.infringement_notice_email = $('#txtEmailAddress').val();
+
+       notice.infringement_notice_charge_description = charge_code ? replaceHolders(charge_code.charge_code_description, notice) : '';
+
       
         infringer.infringement_infringer_court_date = $('#txtCourtDate').val() ? $('#txtCourtDate').val() + 'T00:00:00' : null;
         infringer.infringement_infringer_title = $('#cboTitle').val();
@@ -404,6 +406,8 @@
                 console.log(data);
                 if (data.status == 'Success') {
                     getNoticeByCapturedBy();
+                    if(notice.infringement_notice_status == "Notice" && notice.infringement_notice_type == 50)
+                        runAutomations(notice.infringement_notice_reference);
                     showMessage('success', 'success', data.message, 3000);
                     $('#addNoticeModal').modal('hide');
                     $('#clarityModal').modal('hide');
@@ -422,6 +426,26 @@
 
 
     }
+
+
+  function runAutomations(reference) {
+
+        var details = {
+            infringement_notice_reference: reference
+        }
+        console.log(details);
+        $.ajax({
+            type: "GET", //GET, POST, PUT
+            url: httpsapi + "/configuration/runAutomations",  //the url to call
+            contentType: "application/json",
+            data: jQuery.param(details)
+        }).done(function (data) {
+            console.log(data);
+        }).fail(function (err) {
+            console.log(err.statusText);
+        });
+    }
+
 
 
 

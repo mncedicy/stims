@@ -3,6 +3,7 @@
     var notices = Array();
     var notice = {};
     var infringer = {};
+    var charge_code = {};
     var tab = "Ready";
 
 
@@ -80,6 +81,7 @@
         $('.editNotice').click(function () {
             notice = notices[parseInt(this.id)].notice;
             infringer = notices[parseInt(this.id)].infringer;
+             charge_code = notices[parseInt(this.id)].charge_code;
             $('#addNoticeModal').modal('show');
             loadNotice();
         });
@@ -97,15 +99,21 @@
         $('#txtNoticeReference1').val(notice.infringement_notice_reference);
         $('#cboChargeCode').val(removeZero(notice.infringement_notice_charge_code));
         $('#txtOffenceDate').val(getDatee(notice.infringement_notice_offence_date));
-        $('#cboCourtName').val(notice.infringement_notice_court_id);
+        $('#cboCourtName').val(notice.infringement_notice_client_name);
         $('#txtCourtDate').val(getDatee(notice.infringement_notice_court_date));
         $('#txtOffenceLocation').val(notice.infringement_notice_offence_location);
         $('#txtOffenceLocationCode').val(notice.infringement_notice_offence_location_code);
         $('#txtVehicleRegistration').val(notice.infringement_notice_registration);
-        $('#cboVehicleMake option:contains("' + notice.infringement_notice_vehicle_make + '")').prop('selected', true);
-        $('#cboVehicleMake').trigger('change');
-        $('#cboVehicleModel option:contains("' + notice.infringement_notice_vehicle_model + '")').prop('selected', true);
-        $('#cboVehicleColour option:contains("' + notice.infringement_notice_vehicle_colour + '")').prop('selected', true);
+
+//        $('#cboVehicleMake option:contains("' + notice.infringement_notice_vehicle_make + '")').prop('selected', true);
+//        $('#cboVehicleMake').trigger('change');
+//        $('#cboVehicleModel option:contains("' + notice.infringement_notice_vehicle_model + '")').prop('selected', true);
+//        $('#cboVehicleColour option:contains("' + notice.infringement_notice_vehicle_colour + '")').prop('selected', true);
+
+        $('#cboVehicleMake').val(notice.infringement_notice_vehicle_make);
+        $('#cboVehicleModel').val(notice.infringement_notice_vehicle_model);
+        $('#cboVehicleColour').val(notice.infringement_notice_vehicle_colour);
+
         $('#cboTitle').val(infringer.infringement_infringer_title);
         $('#txtFirstName').val(infringer.infringement_infringer_name);
         $('#txtLastName').val(infringer.infringement_infringer_surname);
@@ -132,36 +140,36 @@
 
 
 
-    $('#cboChargeCode').focusout(function () {
-        if ($(this).val().length < 5) {
-            $(this).parent('div').find('label').text('Invalid Charge Code');
-            $(this).addClass('is-invalid');
-            return;
-        }
-        getChargeCode($(this));
-    });
-    $('#cboChargeCode').focusin(function () {
-        $(this).parent('div').find('label').text('Charge Code');
-        // $(this).removeClass('is-invalid').removeClass('is-valid');
-    });
+//    $('#cboChargeCode').focusout(function () {
+//        if ($(this).val().length < 5) {
+//            $(this).parent('div').find('label').text('Invalid Charge Code');
+//            $(this).addClass('is-invalid');
+//            return;
+//        }
+//        getChargeCode($(this));
+//    });
+//    $('#cboChargeCode').focusin(function () {
+//        $(this).parent('div').find('label').text('Charge Code');
+//        // $(this).removeClass('is-invalid').removeClass('is-valid');
+//    });
 
-    getDefaultData();
+   // getDefaultData();
 
 
-    function getChargeCode(elem) {
-        charge_code = null;
-        var code = parseInt(elem.val());
-        elem.addClass('is-invalid');
-        elem.parent('div').find('label').html('Charge Code Not Found');
-        for (var i = 0; i < defaultData.charge_codes.length; i++) {
-            if (defaultData.charge_codes[i].charge_code == code) {
-                charge_code = defaultData.charge_codes[i];
-                elem.removeClass('is-invalid').addClass('is-valid');
-                elem.parent('div').find('label').html(defaultData.charge_codes[i].charge_code_short_description);
-                i = defaultData.charge_codes.length;
-            }
-        }
-    }
+//    function getChargeCode(elem) {
+//        charge_code = null;
+//        var code = parseInt(elem.val());
+//        elem.addClass('is-invalid');
+//        elem.parent('div').find('label').html('Charge Code Not Found');
+//        for (var i = 0; i < defaultData.charge_codes.length; i++) {
+//            if (defaultData.charge_codes[i].charge_code == code) {
+//                charge_code = defaultData.charge_codes[i];
+//                elem.removeClass('is-invalid').addClass('is-valid');
+//                elem.parent('div').find('label').html(defaultData.charge_codes[i].charge_code_short_description);
+//                i = defaultData.charge_codes.length;
+//            }
+//        }
+//    }
 
 
 
@@ -225,9 +233,9 @@
 
     function saveNotice() {
 
-        notice.infringement_notice_vehicle_make = $('#cboVehicleMake').val() ? $("#cboVehicleMake option:selected").text() : '';
-        notice.infringement_notice_vehicle_model = $('#cboVehicleModel').val() ? $("#cboVehicleModel option:selected").text() : '';
-        notice.infringement_notice_vehicle_colour = $('#cboVehicleColour').val() ? $("#cboVehicleColour option:selected").text() : '';
+        notice.infringement_notice_vehicle_make = $('#cboVehicleMake').val();
+        notice.infringement_notice_vehicle_model = $('#cboVehicleModel').val();
+        notice.infringement_notice_vehicle_colour = $('#cboVehicleColour').val();
 
         infringer.infringement_infringer_title = $('#cboTitle').val();
         infringer.infringement_infringer_name = $('#txtFirstName').val();
@@ -241,6 +249,9 @@
 
         notice.infringement_notice_cellphone = $('#txtCellphoneNumber').val();
         notice.infringement_notice_email = $('#txtEmailAddress').val();
+
+        notice.infringement_notice_enatis_capture_date = getNowDate();
+        notice.infringement_notice_enatis_capture_timestamp = getNowT();
 
         var details = {
             notice: notice,
@@ -262,6 +273,8 @@
                 console.log(data);
                 if (data.status == 'Success') {
                     getEnatis();
+                    if(notice.infringement_notice_enatis_status == "Captured")
+                        runAutomations(notice.infringement_notice_reference);
                     showMessage('success', 'success', data.message, 3000);
                     $('#addNoticeModal').modal('hide');
 
@@ -282,6 +295,23 @@
     }
 
 
+  function runAutomations(reference) {
+
+        var details = {
+            infringement_notice_reference: reference
+        }
+        console.log(details);
+        $.ajax({
+            type: "GET", //GET, POST, PUT
+            url: httpsapi + "/configuration/runAutomations",  //the url to call
+            contentType: "application/json",
+            data: jQuery.param(details)
+        }).done(function (data) {
+            console.log(data);
+        }).fail(function (err) {
+            console.log(err.statusText);
+        });
+    }
 
 
 
@@ -401,6 +431,16 @@
                 if (data.status == 'Success') {
                     showMessage('success', 'success', data.message, 3000);
                     getEnatis();
+
+                     for (var i=0;i<data.data.length;i++) {
+                         if(data.data[i].infringement_notice_enatis_status == "Imported" && data.data[i].infringement_notice_cellphone){
+
+                            setTimeout(function(reference) {
+                             runAutomations(reference);
+                            }, 500, data.data[i].infringement_notice_reference);
+
+                         }
+                     }
                 }
                 else {
                     showMessage('danger', 'Error', data.message, 5000);

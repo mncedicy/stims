@@ -281,8 +281,11 @@ font-size: 13px;
 }
 
 
-._cancelled{ border-bottom: solid 4px red !important; }
-._cancelled i{  color:red !important;  }
+._checkout{ border-bottom: solid 4px #1890ff !important; }
+._checkout i{  color:#1890ff !important;  }
+
+._cancelled{ border-bottom: solid 4px #fbbc00 !important; }
+._cancelled i{  color:#fbbc00 !important;  }
 
 ._failed{ border-bottom: solid 4px red !important; }
 ._failed i{  color:red !important;  }

@@ -76,7 +76,8 @@ public class CapturingController {
     private enatis_typeRepo enatis_typeRepo;
     @Autowired
     private enatis_usageRepo enatis_usageRepo;
-
+    @Autowired
+    ConfigurationController configurationController;
 
     EnatisData enatisData;
     @GetMapping(value = "/welcome")
@@ -343,6 +344,7 @@ public class CapturingController {
         for(infringement_notice notice : notices){
             InfringementData infringement = new InfringementData();
             infringement.notice = notice;
+            infringement.charge_code = chargeCodeRepo.findByChargeCode(notice.infringement_notice_charge_code).get(0);
             List<infringement_infringer> infringers = infringerRepo.findByNoticeIdAndStatus(notice.infringement_notice_id,"active");
             infringement.infringer = !infringers.isEmpty()?infringers.get(0):new infringement_infringer();
             infringements.add(infringement);
@@ -470,6 +472,9 @@ public class CapturingController {
                             posee++;
                             infringer.infringement_infringer_ownership_type = "Business";
                         }
+
+                        infringer.infringement_infringer_cellphone = getValueBetween(line, "021", "023");
+                        notice.infringement_notice_cellphone = infringer.infringement_infringer_cellphone;
 
                         notice.infringement_notice_id_number = infringer.infringement_infringer_id_number;
                         notice.infringement_notice_name = infringer.infringement_infringer_name + " " + infringer.infringement_infringer_surname;

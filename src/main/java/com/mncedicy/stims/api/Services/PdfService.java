@@ -47,21 +47,20 @@ public class PdfService {
         return output.toByteArray();
     }
 
-    public void generatePdfFromHtmlToFile(String html, String fileName, String outputFolder) {
-        try {
 
+    public void writePdfFile(byte[] pdfBytes, String fileName, String outputFolder){
+        try {
             outputFolder = createFolder(outputFolder) + "//" + fileName;
-            OutputStream outputStream = new FileOutputStream(outputFolder);
-            ITextRenderer renderer = new ITextRenderer();
-            renderer.setDocumentFromString(html);
-            renderer.layout();
-            renderer.createPDF(outputStream);
-            outputStream.close();
+            File pdfFile = new File(outputFolder);
+            try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+                fos.write(pdfBytes);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
+
 
     public ResponseEntity<byte[]> downloadResponseEntity(String fileName, String outputFolder, byte[] pdf) {
         HttpHeaders header = new HttpHeaders();
@@ -96,10 +95,10 @@ public class PdfService {
         return folderPath;
     }
 
-    public ResponseEntity<Resource> downloadNoticeExcel(HSSFWorkbook workbook, int client_id) {
+    public ResponseEntity<Resource> downloadNoticeExcel(HSSFWorkbook workbook, int client_id,String type) {
 
         String stamp = LocalDateTime.now().getMinute() + "";
-        String outputFolder = createFolder("attachments\\client_" + client_id + "\\report") + "\\notices.xls";
+        String outputFolder = createFolder("attachments\\client_" + client_id + "\\"+type+"_reports") + "\\report.xls";
 
         try {
             OutputStream ops = new FileOutputStream(outputFolder);
@@ -117,6 +116,7 @@ public class PdfService {
                 MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
         headers.setContentDispositionFormData("attachment", "notices.xls");
         headers.add("name", "notices.xls");
+        headers.add("location", outputFolder);
         InputStreamResource resource;
         try {
 
@@ -138,7 +138,7 @@ public class PdfService {
         byte[] pdf = generatePdfFromHtml(subscriptionPdfHtml);
         String fileName = "court_roll_" + courtRollData.court_roll.court_roll_id + ".pdf";
         String outputFolder = "attachments\\client_" + courtRollData.court_roll.court_roll_client_id + "\\court_roll";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 
@@ -168,7 +168,7 @@ public class PdfService {
         byte[] pdf = generatePdfFromHtml(subscriptionPdfHtml);
         String fileName = "payment_receipt_" + invoiceData.invoice.invoice_number + ".pdf";
         String outputFolder = "attachments\\client_" + invoiceData.invoice.invoice_client_id + "\\payment_receipt";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 
@@ -203,7 +203,7 @@ public class PdfService {
         byte[] pdf = generatePdfFromHtml(subscriptionPdfHtml);
         String fileName = "report.pdf";
         String outputFolder = "attachments\\client_" + templateVariables.get("client_id") + "\\notice_reports";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 
@@ -226,7 +226,7 @@ public class PdfService {
         byte[] pdf = generatePdfFromHtml(subscriptionPdfHtml);
         String fileName = "report.pdf";
         String outputFolder = "attachments\\client_" + templateVariables.get("client_id") + "\\payment_reports";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 
@@ -249,7 +249,7 @@ public class PdfService {
         byte[] pdf = generatePdfFromHtml(subscriptionPdfHtml);
         String fileName = templateVariables.get("id_number") + ".pdf";
         String outputFolder = "attachments\\client_" + templateVariables.get("client_id") + "\\outstanding_tickets";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 
@@ -274,7 +274,7 @@ public class PdfService {
         String fileName = letter_type.split(" ")[0] + "_" + infringementDataList.get(0).notice.infringement_notice_id
                 + ".pdf";
         String outputFolder = "attachments\\client_" + client.client_id + "\\legal_letter";
-        generatePdfFromHtmlToFile(subscriptionPdfHtml, fileName, outputFolder);
+        writePdfFile(pdf, fileName, outputFolder);
         return downloadResponseEntity(fileName, outputFolder, pdf);
     }
 

@@ -19,6 +19,13 @@ C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Cl
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\RuleData.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\RuleNoticesData.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\UserData.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\Card.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\LineItem.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\Metadata.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\PaymentMethodDetails.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\PayRequest.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\PayResponse.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Classes\Yoco\PricingDetails.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Controller\CapturingController.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Controller\ConfigurationController.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Controller\HomeController.java
@@ -42,6 +49,7 @@ C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Mo
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\enatis_type.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\enatis_usage.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\history.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\ikhokha_payment.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\infringement_infringer.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\infringement_notice.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Model\invoice.java
@@ -77,6 +85,7 @@ C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Re
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\enatis_usageRepo.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\EnatisFileRepo.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\HistoryRepo.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\IkhokhaPaymentRepo.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\InfringerRepo.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\InvoiceItemRepo.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Repo\InvoiceRepo.java
@@ -100,3 +109,4 @@ C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Se
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Services\PdfService.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Services\PushNotificationService.java
 C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Services\TwilioService.java
+C:\Users\Mncedisi\source\repos\Stims_api\src\main\java\com\mncedicy\stims\api\Services\YocoPayService.java

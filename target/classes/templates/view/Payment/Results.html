@@ -16,13 +16,23 @@
     <script src="/Scripts/Shared/manageCookie.js"></script>
     <script src="/Scripts/Shared/commonFunctions.js"></script>
     <script src="/Scripts/Shared/https.js"></script>
+    <script src="/Scripts/Payment/results.js"></script>
 
 </head>
 
 <body>
 
 
-<div class="container" style="margin-top: -15px">
+<div class="container">
+
+
+    <div th:if="${type == 'checkout'}" class="row content-center">
+        <div class="col-md-5">
+            <div class="message-box _success _checkout">
+                <p id="checkoutMsg"> Loading... </p>
+            </div>
+        </div>
+    </div>
 
 
     <div th:if="${type == 'success'}" class="row content-center">
@@ -34,7 +44,7 @@
             </div>
         </div>
     </div>
-    <hr>
+
 
 
     <div th:if="${type == 'failure'}"  class="row content-center">

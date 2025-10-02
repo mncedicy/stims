@@ -395,6 +395,8 @@ public class ReportController {
 
     }
 
+
+
     @PostMapping(value = "/printPaymentReport")
     @ResponseBody
     public ResponseEntity<byte[]> printPaymentReport(@RequestBody List<invoice> invoices,
@@ -513,7 +515,7 @@ public class ReportController {
             sheet.autoSizeColumn(i);
         }
 
-        return pdfService.downloadNoticeExcel(workbook, invoices.get(0).invoice_client_id);
+        return pdfService.downloadNoticeExcel(workbook, invoices.get(0).invoice_client_id,"payment");
 
     }
 
@@ -659,7 +661,7 @@ public class ReportController {
             sheet.autoSizeColumn(i);
         }
 
-        return pdfService.downloadNoticeExcel(workbook, notices.get(0).infringement_notice_client_id);
+        return pdfService.downloadNoticeExcel(workbook, notices.get(0).infringement_notice_client_id,"notice");
 
     }
 

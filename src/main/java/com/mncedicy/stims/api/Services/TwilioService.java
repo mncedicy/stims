@@ -32,8 +32,10 @@ public class TwilioService {
         Message message = Message.creator(
                         new PhoneNumber("whatsapp:+27"+to),   // Recipient's WhatsApp number
                         new PhoneNumber("whatsapp:+14155238886"), // Twilio WhatsApp number
-                        messageBody)                         // Message body
+                        messageBody).setSendAsMms(true)                      // Message body
                         .create();
+
+
 
         return message.getSid(); // Return message SID to track status
     }
