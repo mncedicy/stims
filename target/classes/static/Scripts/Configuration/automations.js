@@ -35,12 +35,13 @@
                 var status = getStatus(data[i].rule.rule_status);
                 var deleted = status.status == "Deleted" ? 'hidden="hidden"' : '';
                 var undeleted = status.status != "Deleted" ? 'hidden="hidden"' : '';
+                var days = data[i].rule.rule_trigger == "Email" ? data[i].rule.rule_doc_type : data[i].rule.rule_days_repeats;
 
                 str += '<tr><td>' + (i + 1) + '</td><td>' + data[i].rule.rule_name + '</td>';
                 str += '<td class="text-capitalize">' + data[i].rule.rule_trigger + '</td>';
                 str += '<td class="text-capitalize">' + data[i].rule.rule_type + '</td>';
                 str += '<td class="text-capitalize">' + data[i].rule.rule_when + '</td>';
-                str += '<td class="text-capitalize">' + data[i].rule.rule_days_repeats + '</td>';
+                str += '<td class="text-capitalize">' + days + '</td>';
                 str += '<td>' + status.span + '</td>';
                 str += '<td class="text-center clsAction"><a  ' + deleted + ' class="clsEdit ' + showEdit +'" id="c' + i + '" href="#!"><i class="icon feather icon-edit tblIcon text-primary"></i>';
                 str += '</a><a href="#!" ' + deleted + ' class="clsDelete ' + showDelete +'" id="d' + i + '"><i class="feather icon-trash-2 tblIcon text-danger"></i></a>';
@@ -67,6 +68,7 @@
                 $('.clsRule').val('');
                 $('.Trigger').hide();
                 $('.Type').hide();
+                 $('.cboWhen').hide();
                 $('.clsRuleChange').removeClass("clsRule");
                  $('.clsRuleChangeType').removeClass("clsRule");
                 rule = rules[selectedRule].rule;
@@ -95,6 +97,7 @@
                 $('#cboGrouping').val(rule.rule_grouping);
                 $('#cboStart').val(rule.rule_start_date);
                 $('#txtMessage').val(rule.rule_message);
+                $('#cboWeekDays').val(rule.rule_week_days);
 
     }
 
@@ -104,6 +107,7 @@
         $('.clsRule').val('');
         $('.Trigger').hide();
         $('.Type').hide();
+         $('.cboWhen').hide();
         $('.clsRuleChange').removeClass("clsRule");
          $('.clsRuleChangeType').removeClass("clsRule");
         rule = {};
@@ -124,7 +128,13 @@
         $('.'+$(this).val()).show('fast');
     });
 
-    var txtMessage = $('#txtMessage')[0];
+   $('#cboWhen').change(function () {
+        $('.cboWhen').hide();
+        $('.cboWhen #cboWeekDays').removeClass("clsRule");
+        $('.'+$(this).val()).show('fast');
+        $('.'+$(this).val()+' #cboWeekDays').val('').addClass("clsRule");
+    });
+
 
     $('.variables .dropdown-item').click(function () {
         insertAtCursor('txtMessage', $(this).attr("data-val"));
@@ -191,6 +201,8 @@ function insertAtCursor(textareaId, textToInsert) {
             rule.rule_grouping = $('#cboGrouping').val();
             rule.rule_start_date = $('#cboStart').val();
             rule.rule_message = $('#txtMessage').val();
+            rule.rule_week_days = $('#cboWeekDays').val();
+            rule.rule_range_days = $('#cboRange option:selected').attr('data-val');
             rule.rule_client_id = client_id;
             rule.rule_created_by = person_id;
             rule.rule_created_by_name = person_full_name;
@@ -200,6 +212,8 @@ function insertAtCursor(textareaId, textToInsert) {
                     rule_receivers: []
                 };
 
+
+
                 saveRule(details);
 
     });
@@ -207,9 +221,9 @@ function insertAtCursor(textareaId, textToInsert) {
 
     function saveRule(details) {
 
+console.log(details);
 
 
-        console.log(details, httpsapi + "/configuration/saveRule", JSON.stringify(details));
 
 
         showLoader();
