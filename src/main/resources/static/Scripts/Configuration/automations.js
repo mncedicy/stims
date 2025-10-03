@@ -3,9 +3,12 @@
     checkPriv(14);
    
     var selectedRule;
+    var users = [];
+    var userIds = [];
+    var usersSelected = [];
     var rules = [];
     var rule = {};
-     var rule_receivers = [];
+    var rule_receivers = [];
 
 
     if (myPrivs.indexOf(54) < 0)
@@ -73,6 +76,7 @@
                  $('.clsRuleChangeType').removeClass("clsRule");
                 rule = rules[selectedRule].rule;
                 rule_receivers = rules[selectedRule].rule_receivers;
+                choices.removeActiveItems();
                 loadAll();
             });
 
@@ -98,8 +102,27 @@
                 $('#cboStart').val(rule.rule_start_date);
                 $('#txtMessage').val(rule.rule_message);
                 $('#cboWeekDays').val(rule.rule_week_days);
+                setReceivers();
 
     }
+
+
+
+    usersLightActive();
+    function usersLightActive() {
+        $.ajax({
+            type: "GET", //GET, POST, PUT
+            url: httpsapi + "/home/usersLightActive?client_id=" + client_id,  //the url to call
+            contentType: "application/json"
+        }).done(function (data) {
+            users = data;
+            console.log(data);
+        }).fail(function (err) {
+            console.log(err);
+        });
+    }
+
+
 
 
     $('#btnAddNew').click(function () {
@@ -112,6 +135,7 @@
          $('.clsRuleChangeType').removeClass("clsRule");
         rule = {};
         rule_receivers = [];
+        choices.removeActiveItems();
     });
 
 
@@ -172,6 +196,61 @@ function insertAtCursor(textareaId, textToInsert) {
     });
 
 
+   function setReceivers() {
+        var group = Array();
+        usersSelected = Array();
+        userIds = rule_receivers.map(item => item.rule_receiver_ref_id);
+        for (var i = 0; i < users.length; i++) {
+            var index = group.indexOf(users[i].user_role_id);
+            if (index < 0) {
+                group.push(users[i].user_role_id);
+                usersSelected.push({
+                    label: users[i].user_role_name,
+                    choices: [{
+                        value: i,
+                        label: users[i].user_person_name,
+                        selected: userIds.indexOf(users[i].user_person_id)>=0
+                    }]
+
+                });
+            }
+            else {
+                usersSelected[index].choices.push(
+                    {
+                        value: i,
+                       label: users[i].user_person_name,
+                        selected: userIds.indexOf(users[i].user_person_id)>=0
+
+                    }
+                );
+            }
+
+        }
+
+        choices.setChoices(usersSelected,'value','label',true);
+        console.log(choices.getValue());
+         choices.passedElement.element.blur();
+
+        choices.passedElement.element.addEventListener('change', function (event) {
+            const selectedValues = choices.getValue(true); // Returns array of selected objects
+             for (var i = 0; i < selectedValues.length; i++) {
+                     console.log(selectedValues[0]);
+             }
+            if (selectedValues.length == 0) {
+                $('.choices__inner').removeClass('is-valid').addClass('is-invalid');
+            }
+            else {
+                $('.choices__inner').removeClass('is-invalid').addClass('is-valid');
+            }
+             console.log(choices);
+            console.log(selectedValues);
+        });
+
+        choices.passedElement.element.dispatchEvent(new Event('change'));
+
+
+
+    }
 
 
 
@@ -189,6 +268,11 @@ function insertAtCursor(textareaId, textToInsert) {
                 return;
             }
 
+            var values = choices.getValue(true)
+            if ($("#cboTrigger").val()=='Email' && values.length==0) {
+               return;
+            }
+
 
             rule.rule_status = "Active";
             rule.rule_name = $('#txtName').val();
@@ -199,7 +283,8 @@ function insertAtCursor(textareaId, textToInsert) {
             rule.rule_range = $('#cboRange').val();
             rule.rule_doc_type = $('#cboDocument').val();
             rule.rule_grouping = $('#cboGrouping').val();
-            rule.rule_start_date = $('#cboStart').val();
+            rule.rule_start_date = $('#cboStart').val()?$('#cboStart').val():rule.rule_start_date;
+            rule.rule_start_date = !rule.rule_start_date?getNowDate():rule.rule_start_date;
             rule.rule_message = $('#txtMessage').val();
             rule.rule_week_days = $('#cboWeekDays').val();
             rule.rule_range_days = $('#cboRange option:selected').attr('data-val');
@@ -207,12 +292,26 @@ function insertAtCursor(textareaId, textToInsert) {
             rule.rule_created_by = person_id;
             rule.rule_created_by_name = person_full_name;
 
+            rule_receivers= [];
+            for(var i=0;i<values.length;i++){
+            var choice= values[i];
+                rule_receivers.push({
+                    rule_receiver_rule_id : rule.rule_id,
+                    rule_receiver_name:rule.rule_name,
+                    rule_receiver_type:rule.rule_trigger,
+                    rule_receiver_ref_id:users[choice].user_person_id,
+                    rule_receiver_ref_name:users[choice].user_person_name,
+                    rule_receiver_distination:users[choice].user_username,
+                    rule_receiver_client_id: client_id,
+                    rule_receiver_created_by: person_id,
+                    rule_receiver_created_by_name: person_full_name
+                });
+            }
+
                var details = {
                     rule: rule,
-                    rule_receivers: []
+                    rule_receivers: rule_receivers
                 };
-
-
 
                 saveRule(details);
 

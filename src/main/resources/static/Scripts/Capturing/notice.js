@@ -175,7 +175,7 @@
 
         }
         choices.removeActiveItems();
-        choices.setChoices(defaultData.charge);
+        choices.setChoices(defaultData.charge,'value','label',true);
         console.log(choices.getValue());
          choices.passedElement.element.blur();
       

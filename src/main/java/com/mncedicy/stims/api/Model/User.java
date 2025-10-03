@@ -12,8 +12,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int user_id;
     public String user_username;
+
+    public String getUser_password() {
+        return user_password;
+    }
+
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
+    }
+
     @Column(length = 60)
-    public String user_password;
+    private String user_password;
     public String user_status;
     public int user_client_id;
     public long user_person_id;
@@ -38,4 +47,5 @@ public class User {
     public String user_login_type;
     public String user_app_token;
     public String user_web_token;
+    public String user_person_name;
 }

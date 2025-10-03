@@ -153,7 +153,7 @@ public class ReportController {
         data.histories = historyRepo.findByClientId(client_id);
         data.users = userRepo.findByClientId(client_id);
         for (User user : data.users) {
-            user.user_password = "";
+            user.setUser_password("");
         }
         return data;
     }

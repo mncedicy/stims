@@ -20,6 +20,9 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Query("SELECT a FROM User a WHERE a.user_client_id = :client_id")
     List<User> findByClientId(@Param("client_id") int client_id);
 
+    @Query("SELECT a FROM User a WHERE a.user_client_id = :client_id and a.user_status = 'Active'")
+    List<User> findByClientIdActive(@Param("client_id") int client_id);
+
     @Query("SELECT a FROM User a WHERE a.user_client_id = :client_id and a.user_role_id = :role_id")
     List<User> findByClientIdAndRole(@Param("client_id") int client_id,@Param("role_id") int role_id);
 

@@ -39,7 +39,8 @@ public class HomeController {
     private ClientRepo clientRepo;
     @Autowired
     PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private RuleReceiverRepo ruleReceiverRepo;
 
 
     @GetMapping(value = "/welcome")
@@ -63,6 +64,52 @@ public class HomeController {
         return userDataList;
     }
 
+    @GetMapping(value = "/usersPerson")
+    @ResponseBody
+    public List<UserData> getUsersPerson(@RequestParam int client_id){
+        List<UserData> userDataList = new ArrayList<>();
+        List<User> users= userRepo.findByClientIdActive(client_id);
+        for(User user : users){
+            UserData userData = new UserData();
+            userData.user = user;
+            userData.user.setUser_password(null);
+            userData.person = personRepo.findById(user.user_person_id).get();
+            userDataList.add(userData);
+        }
+        return userDataList;
+    }
+
+
+    @GetMapping(value = "/usersLight")
+    @ResponseBody
+    public List<User> getUsersLight(@RequestParam int client_id){
+        List<User> users = userRepo.findByClientId(client_id);
+        for (User user : users) {
+            user.setUser_password(null); // Call the setter method
+        }
+        return users;
+    }
+
+    @GetMapping(value = "/usersLightActive")
+    @ResponseBody
+    public List<User> getUsersLightActive(@RequestParam int client_id){
+        List<User> users = userRepo.findByClientIdActive(client_id);
+        for (User user : users) {
+            user.setUser_password(null); // Call the setter method
+        }
+        return users;
+    }
+
+
+    @GetMapping(value = "/userByPersonId")
+    @ResponseBody
+    public UserData getUserByPersonId(@RequestParam long person_id){
+        UserData userData = new UserData();
+        userData.person = personRepo.findById(person_id).get();
+        userData.contact = contactRepo.findById(userData.person.person_contacts_id).get();
+        return userData;
+    }
+
 
     @GetMapping(value = "/user/{id}")
     @ResponseBody
@@ -71,6 +118,7 @@ public class HomeController {
         if(user != null){
             UserData userData = new UserData();
             userData.user = user;
+            userData.user.setUser_password(null);
             userData.person = personRepo.findById(user.user_person_id).get();
             userData.role = roleRepo.findById(user.user_role_id).get();
             userData.contact = contactRepo.findById(userData.person.person_contacts_id).get();
@@ -90,7 +138,7 @@ public class HomeController {
 
          List<User> users= userRepo.findUserByUsername(user.user_username);
         if(!users.isEmpty()){
-            if(passwordEncoder.matches(user.user_password,users.get(0).user_password)) {
+            if(passwordEncoder.matches(user.getUser_password(),users.get(0).getUser_password())) {
                 if(users.get(0).user_status.equals("Active")){
                     UserData userData = new UserData();
                     userData.user = users.get(0);
@@ -113,7 +161,7 @@ public class HomeController {
                             users.get(0).user_web_token = user.user_web_token;
                         userRepo.save(users.get(0));
 
-                        userData.user.user_password = "";
+                        userData.user.setUser_password("");
                         response.setData(userData);
                         response.setMessage("Successfully Authenticated");
                         response.setStatus("Success");
@@ -145,8 +193,8 @@ public class HomeController {
         try {
 
             User user= userRepo.findById(user_id).get();
-            if(current_password.isEmpty() || passwordEncoder.matches(current_password,user.user_password)) {
-                user.user_password = passwordEncoder.encode(new_password);
+            if(current_password.isEmpty() || passwordEncoder.matches(current_password,user.getUser_password())) {
+                user.setUser_password(passwordEncoder.encode(new_password));
                 user.user_password_type = "Permanent";
                 user = userRepo.save(user);response.setData(user);
                 response.setMessage("Successfully changed");
@@ -236,7 +284,7 @@ public class HomeController {
         for(User user : users){
             UserData userData = new UserData();
             userData.user = user;
-            userData.user.user_password="";
+            userData.user.setUser_password("");
             userData.role = roleRepo.findById(userData.user.user_role_id).get();
             userData.client = clientRepo.findById(userData.user.user_client_id).get();
             userData.person = personRepo.findById(userData.user.user_person_id).get();
@@ -312,6 +360,7 @@ public class HomeController {
                 user= users.get(0);
                 person = personRepo.findById(data.person.person_id).get();
                 contact = contactRepo.findById(data.contact.contact_id).get();
+                ruleReceiverRepo.updateUserStatusName(data.person.person_id,data.user.user_status,data.person.person_first_name+ " "+data.person.person_last_name);
             }
             else {
                 List<User> users1= userRepo.findUserByUsername(data.user.user_username);
@@ -326,7 +375,7 @@ public class HomeController {
                 }
                 Random r = new Random();
                 int pass = r.nextInt(999999-100000 +1) + 100000;
-                user.user_password = passwordEncoder.encode((pass+""));
+                user.setUser_password(passwordEncoder.encode((pass+"")));
                 String text = "Hi "+data.person.person_first_name+"\n\n"+
                         "Make use of a temporary password, log into the system or application " +
                         "with the provided temporary password. Once logged in, you should be " +
@@ -359,6 +408,7 @@ public class HomeController {
             data.person = personRepo.save(person);
 
 
+            user.user_person_name = data.person.person_first_name+ " "+data.person.person_last_name;
             user.user_person_id = data.person.person_id;
             user.user_last_update = LocalDateTime.now();
             user.user_status = data.user.user_status;

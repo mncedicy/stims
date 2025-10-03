@@ -18,13 +18,13 @@
 
 
 
-    getUser();
-    function getUser() {
+    usersLight();
+    function usersLight() {
         showLoader();
 
         $.ajax({
             type: "GET", //GET, POST, PUT
-            url: httpsapi + "/home/users?client_id=" + client_id,  //the url to call
+            url: httpsapi + "/home/usersLight?client_id=" + client_id,  //the url to call
             contentType: "application/json"
         }).done(function (data) {
             users = data;
@@ -32,14 +32,14 @@
             activeRoles();
            var str = '';
             for (i = 0; i < data.length; i++) {
-                var status = getStatus(data[i].user.user_status);
+                var status = getStatus(data[i].user_status);
                 var deleted = status.status == "Deleted" ? 'hidden="hidden"' : '';
                 var undeleted = status.status != "Deleted" ? 'hidden="hidden"' : '';
 
-                str += '<tr><td>' + (i + 1) + '</td><td>' + data[i].user.user_username + '</td>';
-                str += '<td class="text-capitalize">' + data[i].person.person_first_name + '</td>';
-                str += '<td class="text-capitalize">' + data[i].person.person_last_name + '</td>';
-                str += '<td class="text-capitalize">' + data[i].user.user_role_name + '</td>';
+                str += '<tr><td>' + (i + 1) + '</td><td>' + data[i].user_username + '</td>';
+                str += '<td class="text-capitalize">' + data[i].user_person_name + '</td>';
+                str += '<td class="text-capitalize">' + data[i].user_role_name + '</td>';
+                str += '<td class="text-capitalize">' + getDatee(data[i].user_last_login) + '</td>';
                 str += '<td>' + status.span + '</td>';
                 str += '<td class="text-center clsAction"><a  ' + deleted + ' class="clsEdit ' + showEdit +'" id="c' + i + '" href="#!"><i class="icon feather icon-edit tblIcon text-primary"></i>';
                 str += '</a><a href="#!" ' + deleted + ' class="clsDelete ' + showDelete +'" id="d' + i + '"><i class="feather icon-trash-2 tblIcon text-danger"></i></a>';
@@ -62,12 +62,8 @@
 
             $('.clsEdit').click(function () {
                 selectedUser = parseInt(this.id.substr(1));
-                $('#addUserModal').modal('show');
-                $('#step1').trigger('click');
-                user = users[selectedUser].user;
-                contact = users[selectedUser].contact;
-                person = users[selectedUser].person;
-                loadAll();
+                user = users[selectedUser];
+                userByPersonId(user.user_person_id);
             });
 
 
@@ -77,6 +73,30 @@
             console.log(err);
         });
     }
+
+
+  function userByPersonId(person_id) {
+        showLoader();
+
+        $.ajax({
+            type: "GET", //GET, POST, PUT
+            url: httpsapi + "/home/userByPersonId?person_id=" + person_id,  //the url to call
+            contentType: "application/json"
+        }).done(function (data) {
+            console.log(data);
+            $('#addUserModal').modal('show');
+            $('#step1').trigger('click');
+            contact = data.contact;
+            person = data.person;
+            loadAll();
+
+            hideLoader();
+        }).fail(function (err) {
+            console.log(err);
+        });
+    }
+
+
 
 
     function loadAll() {
@@ -258,7 +278,7 @@
                 hideLoader();
                 console.log(data);
                 if (data.status == 'Success') {
-                    getUser();
+                    usersLight();
                     $('#addUserModal').modal('hide');
                     showMessage('success', 'success', data.message, 3000);
                 }

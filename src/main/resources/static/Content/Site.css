@@ -322,3 +322,15 @@ font-size: 13px;
 .content-center{
 justify-content:center;
 }
+
+.choices__heading {
+    font-weight: bold;
+    font-size: 16px;
+ }
+
+.choices__list--dropdown .choices__item, .choices__list[aria-expanded] .choices__item {
+    left: 10px;
+    }
+.choices__inner {
+    height: auto;
+}

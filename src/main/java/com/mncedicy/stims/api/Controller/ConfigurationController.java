@@ -73,7 +73,8 @@ public class ConfigurationController {
     ManagementController managementController;
     @Autowired
     ReportController reportController;
-
+    @Autowired
+    private InvoiceRepo invoiceRepo;
     @Autowired
     private HistoryRepo historyRepo;
 
@@ -114,25 +115,28 @@ public class ConfigurationController {
         List<rule> rules= ruleRepo.findAllActive();
         List<RuleNoticesData> ruleNoticesDataList = new ArrayList<>();
         for(rule rule :rules){
-            RuleNoticesData ruleNoticesData = new RuleNoticesData();
-            if(rule.rule_when.equals("After Capture Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByCaptureAndEnatisDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
-            else if(rule.rule_when.equals("After Offence Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByOffenceDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
-            else if(rule.rule_when.equals("Before Court Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByCourtDate(rule.rule_client_id, LocalDate.now().plusDays(rule.rule_days_repeats)));
-            else if(rule.rule_when.equals("After Court Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByCourtDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
-            else if(rule.rule_when.equals("Before Payment Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().plusDays(rule.rule_days_repeats)));
-            else if(rule.rule_when.equals("After Payment Date"))
-                ruleNoticesData = new RuleNoticesData(rule,noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
-            else if(rule.rule_type.equals("Infringement") || rule.rule_type.equals("Payment"))
-                return runReport(rule);
+            long daysBetween = ChronoUnit.DAYS.between(rule.rule_start_date, LocalDate.now());
+            if(daysBetween>=0) {
+                RuleNoticesData ruleNoticesData = new RuleNoticesData();
+                if (rule.rule_when.equals("After Capture Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByCaptureAndEnatisDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+                else if (rule.rule_when.equals("After Offence Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByOffenceDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+                else if (rule.rule_when.equals("Before Court Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByCourtDate(rule.rule_client_id, LocalDate.now().plusDays(rule.rule_days_repeats)));
+                else if (rule.rule_when.equals("After Court Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByCourtDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+                else if (rule.rule_when.equals("Before Payment Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().plusDays(rule.rule_days_repeats)));
+                else if (rule.rule_when.equals("After Payment Date"))
+                    ruleNoticesData = new RuleNoticesData(rule, noticeRepo.findByPaymentDate(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_days_repeats)));
+                else if (rule.rule_type.equals("Infringement") || rule.rule_type.equals("Payment"))
+                    runReport(rule);
 
 
-            if(ruleNoticesData.notices.size()>0)
-                ruleNoticesDataList.add(ruleNoticesData);
+                if (ruleNoticesData.notices.size() > 0)
+                    ruleNoticesDataList.add(ruleNoticesData);
+            }
         }
 
 
@@ -174,34 +178,51 @@ public class ConfigurationController {
                         " to "+LocalDate.now().format(formatter)+" attached to this email.\n\nBest regards,\n\nStims automated email reports";
         try {
             long daysBetween = ChronoUnit.DAYS.between(rule.rule_start_date, LocalDate.now());
-            if(rule.rule_when.equals("Daily") || (rule.rule_when.equals("Weekly") && daysBetween%7==0)
-            || (rule.rule_when.equals("Monthly") && rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth()
-            || (rule.rule_when.equals("Yearly") && (rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth()
-                    && rule.rule_start_date.getMonthValue()==LocalDate.now().getMonthValue())))){
+            boolean isWeekdays = LocalDate.now().getDayOfWeek().getValue()<6;
+            boolean meetDaily = rule.rule_when.equals("Daily") && ((isWeekdays && rule.rule_week_days.contains("Weekdays")) || (!isWeekdays && rule.rule_week_days.contains("Weekends")));
+            boolean meetWeekly = rule.rule_when.equals("Weekly") && daysBetween%7==0;
+            boolean meetMonthly = rule.rule_when.equals("Monthly") && rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth();
+            boolean meetYearly = rule.rule_when.equals("Yearly") && (rule.rule_start_date.getDayOfMonth()==LocalDate.now().getDayOfMonth()
+                    && rule.rule_start_date.getMonthValue()==LocalDate.now().getMonthValue());
 
+            if(meetDaily || meetWeekly || meetMonthly || meetYearly){
+
+                List<String> locations = new ArrayList<>();
                  if(rule.rule_type.equals("Infringement")){
-                     System.out.println(LocalDate.now().minusDays(rule.rule_range_days));
                      List<infringement_notice> notices = noticeRepo.findNoticeByDateRange(rule.rule_client_id,
                              LocalDate.now().minusDays(rule.rule_range_days),LocalDate.now(), "");
                      System.out.println(notices);
                      if(!notices.isEmpty()) {
-                         String location="";
-                         if(rule.rule_doc_type.equals("PDF"))
-                             location = reportController.printNoticeReport(notices, rule.rule_grouping).getHeaders().getFirst("location");
-                         else
-                             location = reportController.printNoticeExcel(notices, rule.rule_grouping).getHeaders().getFirst("location");
-
-                         System.out.println(location);
-                         emailService.sendMessageWithInputStreamAttachment(
-                                 new String[]{"mkhonzenimkhonzeni@gmail.com"},
-                                 rule.rule_type + " report", emailBody,
-                                 new String[]{location});
-
+                         if(rule.rule_doc_type.contains("PDF"))
+                             locations.add(reportController.printNoticeReport(notices, rule.rule_grouping).getHeaders().getFirst("location"));
+                         if(rule.rule_doc_type.contains("Excel"))
+                             locations.add(reportController.printNoticeExcel(notices, rule.rule_grouping).getHeaders().getFirst("location"));
                      }
                      response.setData(notices);
                  }
                  else if (rule.rule_type.equals("Payment")){
+                     List<invoice> invoices = invoiceRepo.findInvoiceDateRange(rule.rule_client_id, LocalDate.now().minusDays(rule.rule_range_days),LocalDate.now());
+                     System.out.println(invoices);
+                     if(!invoices.isEmpty()) {
+                         if(rule.rule_doc_type.contains("PDF"))
+                             locations.add(reportController.printPaymentReport(invoices, rule.rule_grouping).getHeaders().getFirst("location"));
+                         if(rule.rule_doc_type.contains("Excel"))
+                             locations.add(reportController.printPaymentExcel(invoices, rule.rule_grouping).getHeaders().getFirst("location"));
+                     }
+                     response.setData(invoices);
+                 }
 
+                System.out.println(locations);
+                 if(!locations.isEmpty()) {
+                     List<rule_receiver> receivers= ruleReceiverRepo.findByRuleIdActive(rule.rule_id);
+                     List<String> emails = new ArrayList<>();
+                     for(rule_receiver receiver:receivers)
+                         emails.add(receiver.rule_receiver_distination);
+
+                     emailService.sendMessageWithInputStreamAttachment(
+                             emails.toArray(new String[0]),
+                             rule.rule_type + " report", emailBody,
+                             locations.toArray(new String[0]));
                  }
 
             }
@@ -413,8 +434,11 @@ public class ConfigurationController {
             }
 
             data.rule = ruleRepo.save(data.rule);
+            ruleReceiverRepo.deleteByRuleId(data.rule.rule_id);
+            data.rule_receivers = ruleReceiverRepo.saveAll(data.rule_receivers);
 
             response.setData(data);
+            response.setData1(data.rule_receivers);
             response.setMessage("Successfully Saved");
             response.setStatus("Success");
         }catch (Exception e){

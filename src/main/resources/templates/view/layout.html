@@ -98,11 +98,12 @@
                 removeItems: true,
                 removeItemButton: true,
                 paste: true,
-                maxItemCount: 1,
+                maxItemCount: element.getAttribute('data-count'),
                 itemSelectText: '',
                 maxItemText: (maxItemCount) => {
                     return null;
                 },
+                duplicateItemsAllowed :false,
             });
 
     }

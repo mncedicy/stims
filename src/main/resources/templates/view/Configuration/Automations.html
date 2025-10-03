@@ -111,11 +111,7 @@
                                         <option selected value="">Select</option>
                                         <option value="Weekdays">Weekdays</option>
                                         <option value="Weekends">Weekends</option>
-                                        <option value="Holidays">Holidays</option>
                                         <option value="Weekdays Weekends">Weekdays and Weekends</option>
-                                        <option value="Weekdays Holidays">Weekdays and Holidays</option>
-                                        <option value="Weekends Holidays">Weekends and Holidays</option>
-                                        <option value="Weekdays Weekends Holidays">Weekdays, Weekends and Holidays</option>
                                     </select>
                                     <label for="cboWeekDays">Week Days</label>
                                 </div>
@@ -161,6 +157,7 @@
                                         <option value="">Select</option>
                                         <option value="PDF">PDF</option>
                                         <option value="Excel">Excel</option>
+                                        <option value="PDF Excel">PDF and Excel</option>
                                     </select>
                                     <label for="cboDocument">Document Type</label>
                                 </div>
@@ -191,6 +188,13 @@
                                     <input type="text" autocomplete="off" id="cboStart" class="form-control clsCleanTrigger myDatepicker clsRuleChange" placeholder="Date" />
 
                                     <label for="cboStart">Start From</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-3 Trigger Email">
+                                <div class="form-floating">
+                                    <select id="cboReceivers" style="height: auto;" data-count="10" multiple data-placeholder="Report Receivers" class="form-control js-choice clsCleanTrigger  clsRuleChange"></select>
+<!--                                    <label for="cboReceivers">Report Receivers</label>-->
                                 </div>
                             </div>
 
